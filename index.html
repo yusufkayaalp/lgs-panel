@@ -3,179 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ege Kayaalp | LGS Productivity Pro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <title>Ege Kayaalp | Focus Pro</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --accent: #a29bfe;
-            --primary: #6c5ce7;
-            --success: #00b894;
-            --danger: #ff7675;
-            --bg: #0f0c29;
-            --glass: rgba(255, 255, 255, 0.1);
+            --bg: #121212;
+            --card: #1e1e1e;
+            --primary: #8e7dff;
+            --text: #ffffff;
+            --muted: #a0a0a0;
         }
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            color: #fff;
+            background-color: var(--bg);
+            color: var(--text);
             margin: 0;
-            padding: 15px;
+            padding: 20px;
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+            justify-content: center;
         }
 
-        .app-container {
+        .container {
             width: 100%;
-            max-width: 500px;
+            max-width: 450px;
             display: flex;
             flex-direction: column;
             gap: 20px;
         }
 
-        .glass-card {
-            background: var(--glass);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 30px;
-            padding: 25px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        .card {
+            background: var(--card);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
         }
 
-        /* TIMER AREA (TOP) */
-        .timer-header {
+        /* TIMER SECTION (TOP) */
+        .timer-section {
             text-align: center;
-            order: 1;
-        }
-
-        .label-main {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 0.7rem;
-            letter-spacing: 4px;
-            color: var(--accent);
-            text-transform: uppercase;
+            padding: 40px 20px;
         }
 
         .timer-display {
-            font-family: 'Orbitron', sans-serif;
             font-size: 6rem;
-            font-weight: 700;
-            margin: 15px 0;
-            text-shadow: 0 0 20px rgba(108, 92, 231, 0.5);
+            font-weight: 800;
+            color: var(--primary);
+            line-height: 1;
+            margin: 10px 0;
         }
 
-        /* CONTROLS AREA */
-        .controls-area {
-            order: 2;
+        .status-label {
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            color: var(--muted);
+            text-transform: uppercase;
         }
 
+        /* CONTROLS SECTION */
         .mode-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 25px;
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
         .mode-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: #fff;
-            padding: 15px;
-            border-radius: 20px;
+            background: #2a2a2a;
+            border: 1px solid #333;
+            color: var(--text);
+            padding: 12px;
+            border-radius: 12px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            font-size: 0.9rem;
+            transition: 0.2s;
         }
-
-        .mode-btn b { font-size: 0.9rem; }
-        .mode-btn span { font-size: 0.65rem; opacity: 0.6; }
 
         .mode-btn.active {
             background: var(--primary);
-            box-shadow: 0 0 20px rgba(108, 92, 231, 0.4);
-            border-color: var(--accent);
+            border-color: var(--primary);
         }
 
-        .action-btn {
+        .main-btn {
             width: 100%;
-            padding: 20px;
-            border-radius: 20px;
+            padding: 18px;
+            border-radius: 15px;
             border: none;
-            font-weight: 800;
-            font-size: 1.2rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            font-size: 1.1rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: 0.3s;
+            background: #ffffff;
+            color: #000000;
+            transition: 0.2s;
         }
 
-        .start { background: var(--success); color: white; }
-        .stop { background: var(--danger); color: white; }
-
-        /* TASKS AREA */
-        .tasks-area {
-            order: 3;
-        }
-
-        .todo-input-group {
+        /* TASKS SECTION */
+        .task-input-group {
             display: flex;
             gap: 10px;
-            background: rgba(0,0,0,0.2);
-            padding: 5px 5px 5px 15px;
-            border-radius: 20px;
+            margin-bottom: 15px;
         }
 
-        .todo-input-group input {
-            background: none;
-            border: none;
-            color: white;
+        .task-input-group input {
             flex: 1;
-            outline: none;
-            font-family: 'Poppins';
-        }
-
-        .add-btn {
-            background: var(--primary);
-            color: white;
+            background: #2a2a2a;
             border: none;
-            width: 45px;
-            height: 45px;
-            border-radius: 15px;
-            font-size: 1.5rem;
-            cursor: pointer;
+            padding: 12px;
+            border-radius: 10px;
+            color: white;
+            outline: none;
         }
 
         .todo-item {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 12px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #2a2a2a;
         }
 
-        /* STATS AREA (BOTTOM) */
-        .stats-area {
-            order: 4;
-            margin-bottom: 40px;
-        }
-
-        .stats-footer {
+        /* STATS SECTION (BOTTOM) */
+        .stats-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 10px;
         }
 
-        .stat-val { font-size: 1.8rem; font-weight: 800; color: var(--accent); }
-        .stat-lbl { font-size: 0.6rem; opacity: 0.6; text-transform: uppercase; }
+        .total-count {
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--primary);
+        }
 
         @media (max-width: 400px) {
             .timer-display { font-size: 4.5rem; }
@@ -184,57 +144,42 @@
 </head>
 <body>
 
-    <div class="app-container">
-        <div class="glass-card timer-header">
-            <div class="label-main">System Online</div>
+    <div class="container">
+        <div class="card timer-section">
+            <div class="status-label" id="status-text">System Ready</div>
             <div class="timer-display" id="timer">25:00</div>
-            <div id="quote-box" style="font-size: 0.8rem; font-style: italic; opacity: 0.8;">"Dream big, study hard, make it happen."</div>
+            <div style="font-size: 0.8rem; color: var(--muted);" id="mode-label">Focus Session</div>
         </div>
 
-        <div class="glass-card controls-area">
+        <div class="card">
             <div class="mode-grid">
-                <button class="mode-btn active" onclick="setMode(25, 'Focus', this)">
-                    <b>Focus</b><span>Odaklan</span>
-                </button>
-                <button class="mode-btn" onclick="setMode(5, 'Break', this)">
-                    <b>Break</b><span>Mola</span>
-                </button>
-                <button class="mode-btn" onclick="setMode(75, 'Verbal', this)">
-                    <b>Verbal</b><span>Sözel</span>
-                </button>
-                <button class="mode-btn" onclick="setMode(80, 'Numeric', this)">
-                    <b>Numeric</b><span>Sayısal</span>
-                </button>
+                <button class="mode-btn active" onclick="setMode(25, 'Focus Session', this)">Focus</button>
+                <button class="mode-btn" onclick="setMode(5, 'Short Break', this)">Break</button>
+                <button class="mode-btn" onclick="setMode(75, 'Verbal Session', this)">Verbal</button>
+                <button class="mode-btn" onclick="setMode(80, 'Numeric Session', this)">Numeric</button>
             </div>
-            <button class="action-btn start" id="main-action" onclick="toggleTimer()">Start / Başlat</button>
+            <button class="main-btn" id="start-btn" onclick="toggleTimer()">START</button>
             <div style="text-align: center; margin-top: 15px;">
-                <span onclick="resetTimer()" style="cursor:pointer; font-size: 0.7rem; opacity: 0.5; text-decoration: underline;">Reset Timer / Sıfırla</span>
+                <span onclick="resetTimer()" style="color: var(--muted); font-size: 0.7rem; cursor: pointer; text-decoration: underline;">Reset Timer</span>
             </div>
         </div>
 
-        <div class="glass-card tasks-area">
-            <div style="margin-bottom: 15px; font-weight: 600; font-size: 0.9rem;">Daily Targets / Günlük Hedefler</div>
-            <div class="todo-input-group">
-                <input type="text" id="todo-in" placeholder="Add new task...">
-                <button class="add-btn" onclick="addTodo()">+</button>
+        <div class="card">
+            <div style="font-size: 0.9rem; font-weight: 600; margin-bottom: 15px;">Today's Targets</div>
+            <div class="task-input-group">
+                <input type="text" id="task-in" placeholder="New target...">
+                <button onclick="addTask()" style="background: var(--primary); border:none; color:white; padding:0 15px; border-radius:10px; cursor:pointer;">+</button>
             </div>
-            <div id="todo-list" style="margin-top: 10px; max-height: 200px; overflow-y: auto;"></div>
+            <div id="task-list"></div>
         </div>
 
-        <div class="glass-card stats-area">
-            <div style="font-weight: 600; font-size: 0.9rem; margin-bottom: 10px;">Weekly Performance</div>
-            <div style="height: 180px;">
-                <canvas id="performanceChart"></canvas>
+        <div class="card">
+            <div class="stats-header">
+                <span style="font-size: 0.9rem; font-weight: 600;">Weekly Stats</span>
+                <span class="total-count" id="week-total">0</span>
             </div>
-            <div class="stats-footer">
-                <div>
-                    <div class="stat-lbl">Sessions Completed</div>
-                    <div class="stat-val" id="total-sessions">0</div>
-                </div>
-                <div style="text-align: right;">
-                    <div class="stat-lbl">Level</div>
-                    <div class="stat-val" style="color: var(--success);">LGS PRO</div>
-                </div>
+            <div style="height: 150px;">
+                <canvas id="chart"></canvas>
             </div>
         </div>
     </div>
@@ -242,30 +187,29 @@
     <audio id="beep" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg"></audio>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('ege_pro_v8')) || { stats: {}, tasks: [] };
+        let db = JSON.parse(localStorage.getItem('ege_focus_v9')) || { stats: {}, tasks: [] };
         let timeLeft = 25 * 60;
         let isRunning = false;
-        let timerLoop = null;
+        let timerId = null;
         let endTime = null;
         let myChart = null;
 
-        // Notification Request
         if ("Notification" in window) Notification.requestPermission();
 
         function toggleTimer() {
-            const btn = document.getElementById('main-action');
+            const btn = document.getElementById('start-btn');
             if (isRunning) {
                 isRunning = false;
-                clearInterval(timerLoop);
+                clearInterval(timerId);
                 timeLeft = Math.max(0, Math.round((endTime - Date.now()) / 1000));
-                btn.className = "action-btn start";
-                btn.textContent = "Resume / Devam Et";
+                btn.textContent = "RESUME";
+                document.getElementById('status-text').textContent = "Paused";
             } else {
                 isRunning = true;
                 endTime = Date.now() + (timeLeft * 1000);
-                timerLoop = setInterval(update, 100);
-                btn.className = "action-btn stop";
-                btn.textContent = "Pause / Duraklat";
+                timerId = setInterval(update, 100);
+                btn.textContent = "STOP";
+                document.getElementById('status-text').textContent = "Working...";
             }
         }
 
@@ -276,7 +220,7 @@
                 timeLeft = remain;
                 render();
                 if (timeLeft <= 0) {
-                    clearInterval(timerLoop);
+                    clearInterval(timerId);
                     complete();
                 }
             }
@@ -287,33 +231,31 @@
             const s = timeLeft % 60;
             const str = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
             document.getElementById('timer').textContent = str;
-            document.title = str + " | LGS Focus";
         }
 
         function complete() {
             document.getElementById('beep').play();
-            if (Notification.permission === "granted") {
-                new Notification("Time's Up! / Süre Bitti!", { body: "Take a break, Ege! / Dinlenme vakti." });
-            }
+            if (Notification.permission === "granted") new Notification("Time is up!");
             
-            const activeMode = document.querySelector('.mode-btn.active b').textContent;
-            if (activeMode !== "Break") {
+            const activeMode = document.getElementById('mode-label').textContent;
+            if (!activeMode.includes("Break")) {
                 const day = new Date().toISOString().split('T')[0];
                 db.stats[day] = (db.stats[day] || 0) + 1;
                 save();
             }
-            alert("Great job! / Tebrikler Ege!");
+            alert("Session finished!");
             resetTimer();
         }
 
         function setMode(mins, label, btn) {
             isRunning = false;
-            clearInterval(timerLoop);
+            clearInterval(timerId);
             timeLeft = mins * 60;
             document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            document.getElementById('main-action').className = "action-btn start";
-            document.getElementById('main-action').textContent = "Start / Başlat";
+            document.getElementById('mode-label').textContent = label;
+            document.getElementById('start-btn').textContent = "START";
+            document.getElementById('status-text').textContent = "System Ready";
             render();
         }
 
@@ -322,52 +264,43 @@
         }
 
         function save() {
-            localStorage.setItem('ege_pro_v8', JSON.stringify(db));
+            localStorage.setItem('ege_focus_v9', JSON.stringify(db));
             updateUI();
         }
 
         function updateUI() {
-            // Update Tasks
-            const list = document.getElementById('todo-list');
+            // Tasks
+            const list = document.getElementById('task-list');
             list.innerHTML = '';
             db.tasks.forEach((t, i) => {
-                const item = document.createElement('div');
-                item.className = 'todo-item';
-                item.innerHTML = `
-                    <input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${i})">
-                    <span style="${t.done?'text-decoration:line-through;opacity:0.4':''}">${t.txt}</span>
-                `;
-                list.appendChild(item);
+                const div = document.createElement('div');
+                div.className = 'todo-item';
+                div.innerHTML = `<input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${i})"> 
+                                <span style="${t.done?'text-decoration:line-through;opacity:0.4':''}">${t.txt}</span>`;
+                list.appendChild(div);
             });
 
-            // Update Chart
-            const ctx = document.getElementById('performanceChart').getContext('2d');
-            const labels = [];
-            const data = [];
-            let total = 0;
+            // Chart
+            const ctx = document.getElementById('chart').getContext('2d');
+            const labels = []; const data = []; let total = 0;
             for(let i=6; i>=0; i--) {
                 const d = new Date(); d.setDate(d.getDate()-i);
                 const k = d.toISOString().split('T')[0];
-                labels.push(d.toLocaleDateString('en-US', {weekday: 'short'}));
+                labels.push(d.toLocaleDateString('tr-TR', {weekday: 'short'}));
                 const v = db.stats[k] || 0;
-                data.push(v);
-                total += v;
+                data.push(v); total += v;
             }
-            document.getElementById('total-sessions').textContent = total;
+            document.getElementById('week-total').textContent = total;
 
             if(myChart) myChart.destroy();
             myChart = new Chart(ctx, {
-                type: 'line',
+                type: 'bar',
                 data: {
                     labels: labels,
                     datasets: [{
                         data: data,
-                        borderColor: '#a29bfe',
-                        borderWidth: 3,
-                        pointBackgroundColor: '#6c5ce7',
-                        fill: true,
-                        backgroundColor: 'rgba(162, 155, 254, 0.1)',
-                        tension: 0.4
+                        backgroundColor: '#8e7dff',
+                        borderRadius: 5
                     }]
                 },
                 options: {
@@ -375,18 +308,18 @@
                     plugins: { legend: { display: false } },
                     scales: { 
                         y: { display: false, beginAtZero: true },
-                        x: { grid: { display: false }, ticks: { color: 'rgba(255,255,255,0.5)', font: { size: 10 } } }
+                        x: { grid: { display: false }, ticks: { color: '#666' } }
                     }
                 }
             });
         }
 
-        function addTodo() {
-            const input = document.getElementById('todo-in');
-            if(!input.value.trim()) return;
-            db.tasks.push({ txt: input.value, done: false });
+        function addTask() {
+            const inp = document.getElementById('task-in');
+            if(!inp.value.trim()) return;
+            db.tasks.push({ txt: inp.value, done: false });
             save();
-            input.value = '';
+            inp.value = '';
         }
 
         function toggleTask(i) {
@@ -394,7 +327,6 @@
             save();
         }
 
-        // Init
         updateUI();
         render();
     </script>
