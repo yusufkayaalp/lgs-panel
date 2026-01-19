@@ -3,65 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ege Kayaalp | Focus Pro</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>Ege Kayaalp | Focus Pro V10</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&family=Montserrat:wght@900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --bg: #121212;
-            --card: #1e1e1e;
-            --primary: #8e7dff;
-            --text: #ffffff;
-            --muted: #a0a0a0;
+            --primary: #f39c12; /* Enerjik Turuncu */
+            --bg: #f4f7f6; /* Ferah Arka Plan */
+            --card: #ffffff;
+            --text-dark: #2d3436;
+            --text-light: #636e72;
+            --accent: #3498db;
         }
 
         body {
             font-family: 'Poppins', sans-serif;
             background-color: var(--bg);
-            color: var(--text);
+            color: var(--text-dark);
             margin: 0;
-            padding: 20px;
+            padding: 15px;
             display: flex;
             justify-content: center;
+            min-height: 100vh;
         }
 
-        .container {
+        .app-container {
             width: 100%;
-            max-width: 450px;
+            max-width: 480px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
         }
 
         .card {
             background: var(--card);
-            border-radius: 20px;
+            border-radius: 24px;
             padding: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border: 1px solid rgba(0,0,0,0.02);
         }
 
-        /* TIMER SECTION (TOP) */
-        .timer-section {
+        /* HEADER & NAME */
+        .header-card {
             text-align: center;
-            padding: 40px 20px;
+            padding: 15px;
+            background: white;
         }
 
-        .timer-display {
-            font-size: 6rem;
-            font-weight: 800;
-            color: var(--primary);
-            line-height: 1;
-            margin: 10px 0;
-        }
-
-        .status-label {
-            font-size: 0.8rem;
-            letter-spacing: 2px;
-            color: var(--muted);
+        .user-name {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: 1.8rem;
+            letter-spacing: -1px;
+            color: var(--text-dark);
+            margin: 0;
             text-transform: uppercase;
         }
 
-        /* CONTROLS SECTION */
+        .user-name span {
+            color: var(--primary);
+        }
+
+        .quote-box {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            font-style: italic;
+            margin-top: 5px;
+            min-height: 40px;
+        }
+
+        /* TIMER SECTION */
+        .timer-card {
+            text-align: center;
+            padding: 30px 10px;
+        }
+
+        .timer-display {
+            font-size: 6.5rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            line-height: 1;
+            margin: 10px 0;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+
+        /* CONTROLS */
         .mode-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -70,60 +105,66 @@
         }
 
         .mode-btn {
-            background: #2a2a2a;
-            border: 1px solid #333;
-            color: var(--text);
+            background: #f8f9fa;
+            border: 1px solid #eee;
+            color: var(--text-light);
             padding: 12px;
-            border-radius: 12px;
+            border-radius: 16px;
             cursor: pointer;
-            font-size: 0.9rem;
+            font-weight: 600;
+            font-size: 0.85rem;
             transition: 0.2s;
         }
 
         .mode-btn.active {
-            background: var(--primary);
+            background: #fff;
+            color: var(--primary);
             border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(243, 156, 18, 0.15);
         }
 
         .main-btn {
             width: 100%;
             padding: 18px;
-            border-radius: 15px;
+            border-radius: 18px;
             border: none;
-            font-size: 1.1rem;
-            font-weight: 600;
+            font-size: 1.2rem;
+            font-weight: 800;
             cursor: pointer;
-            background: #ffffff;
-            color: #000000;
-            transition: 0.2s;
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 8px 20px rgba(243, 156, 18, 0.3);
+            transition: 0.3s;
         }
 
-        /* TASKS SECTION */
+        .main-btn:active { transform: scale(0.98); }
+
+        /* TARGETS */
         .task-input-group {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             margin-bottom: 15px;
         }
 
         .task-input-group input {
             flex: 1;
-            background: #2a2a2a;
-            border: none;
+            background: #f8f9fa;
+            border: 1px solid #eee;
             padding: 12px;
-            border-radius: 10px;
-            color: white;
+            border-radius: 12px;
             outline: none;
+            font-family: 'Poppins';
         }
 
         .todo-item {
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 8px 0;
-            border-bottom: 1px solid #2a2a2a;
+            padding: 10px 0;
+            border-bottom: 1px solid #f8f9fa;
         }
 
-        /* STATS SECTION (BOTTOM) */
+        /* STATS (BOTTOM) */
         .stats-header {
             display: flex;
             justify-content: space-between;
@@ -131,24 +172,25 @@
             margin-bottom: 10px;
         }
 
-        .total-count {
-            font-size: 1.5rem;
-            font-weight: 800;
-            color: var(--primary);
-        }
-
         @media (max-width: 400px) {
-            .timer-display { font-size: 4.5rem; }
+            .timer-display { font-size: 5rem; }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="card timer-section">
-            <div class="status-label" id="status-text">System Ready</div>
+    <div class="app-container">
+        <div class="card header-card">
+            <h1 class="user-name">EGE <span>KAYAALP</span></h1>
+            <div id="quote-text" class="quote-box">"Believe in yourself. You are capable of amazing things."</div>
+        </div>
+
+        <div class="card timer-card">
+            <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-light); letter-spacing: 2px;">
+                <span class="status-dot"></span> FOCUS SESSION
+            </div>
             <div class="timer-display" id="timer">25:00</div>
-            <div style="font-size: 0.8rem; color: var(--muted);" id="mode-label">Focus Session</div>
+            <div style="font-size: 0.85rem; color: var(--text-light);" id="mode-display">Time to Study</div>
         </div>
 
         <div class="card">
@@ -160,25 +202,25 @@
             </div>
             <button class="main-btn" id="start-btn" onclick="toggleTimer()">START</button>
             <div style="text-align: center; margin-top: 15px;">
-                <span onclick="resetTimer()" style="color: var(--muted); font-size: 0.7rem; cursor: pointer; text-decoration: underline;">Reset Timer</span>
+                <span onclick="resetTimer()" style="color: var(--text-light); font-size: 0.75rem; cursor: pointer; opacity: 0.7;">Reset Timer / Sıfırla</span>
             </div>
         </div>
 
         <div class="card">
-            <div style="font-size: 0.9rem; font-weight: 600; margin-bottom: 15px;">Today's Targets</div>
+            <div style="font-size: 0.95rem; font-weight: 800; margin-bottom: 12px; color: var(--text-dark);">Today's Targets</div>
             <div class="task-input-group">
-                <input type="text" id="task-in" placeholder="New target...">
-                <button onclick="addTask()" style="background: var(--primary); border:none; color:white; padding:0 15px; border-radius:10px; cursor:pointer;">+</button>
+                <input type="text" id="task-in" placeholder="Add a goal...">
+                <button onclick="addTask()" style="background: var(--accent); border:none; color:white; padding:0 15px; border-radius:12px; cursor:pointer; font-weight:bold;">+</button>
             </div>
-            <div id="task-list"></div>
+            <div id="task-list" style="max-height: 150px; overflow-y: auto;"></div>
         </div>
 
         <div class="card">
             <div class="stats-header">
-                <span style="font-size: 0.9rem; font-weight: 600;">Weekly Stats</span>
-                <span class="total-count" id="week-total">0</span>
+                <span style="font-size: 0.95rem; font-weight: 800;">Weekly Stats</span>
+                <span style="font-size: 1.5rem; font-weight: 800; color: var(--primary);" id="week-total">0</span>
             </div>
-            <div style="height: 150px;">
+            <div style="height: 160px;">
                 <canvas id="chart"></canvas>
             </div>
         </div>
@@ -187,12 +229,22 @@
     <audio id="beep" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg"></audio>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('ege_focus_v9')) || { stats: {}, tasks: [] };
+        let db = JSON.parse(localStorage.getItem('ege_lgs_v10')) || { stats: {}, tasks: [] };
         let timeLeft = 25 * 60;
         let isRunning = false;
         let timerId = null;
         let endTime = null;
         let myChart = null;
+
+        const quotes = [
+            "Believe in yourself. You are capable of amazing things.",
+            "Success is the sum of small efforts, repeated daily.",
+            "Focus on being productive instead of busy.",
+            "Your only limit is your mind. Keep pushing Ege!",
+            "Don't stop until you're proud of yourself.",
+            "The future depends on what you do today.",
+            "Study now, be a champion later."
+        ];
 
         if ("Notification" in window) Notification.requestPermission();
 
@@ -203,14 +255,15 @@
                 clearInterval(timerId);
                 timeLeft = Math.max(0, Math.round((endTime - Date.now()) / 1000));
                 btn.textContent = "RESUME";
-                document.getElementById('status-text').textContent = "Paused";
+                btn.style.background = "var(--accent)";
             } else {
                 isRunning = true;
                 endTime = Date.now() + (timeLeft * 1000);
                 timerId = setInterval(update, 100);
                 btn.textContent = "STOP";
-                document.getElementById('status-text').textContent = "Working...";
+                btn.style.background = "#e74c3c"; // Durunca kırmızımsı
             }
+            changeQuote();
         }
 
         function update() {
@@ -229,21 +282,20 @@
         function render() {
             const m = Math.floor(timeLeft / 60);
             const s = timeLeft % 60;
-            const str = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-            document.getElementById('timer').textContent = str;
+            document.getElementById('timer').textContent = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
         }
 
         function complete() {
             document.getElementById('beep').play();
-            if (Notification.permission === "granted") new Notification("Time is up!");
+            if (Notification.permission === "granted") new Notification("Well done Ege!", {body: "Session Completed."});
             
-            const activeMode = document.getElementById('mode-label').textContent;
+            const activeMode = document.getElementById('mode-display').textContent;
             if (!activeMode.includes("Break")) {
                 const day = new Date().toISOString().split('T')[0];
                 db.stats[day] = (db.stats[day] || 0) + 1;
                 save();
             }
-            alert("Session finished!");
+            alert("Great work! Time is up.");
             resetTimer();
         }
 
@@ -253,18 +305,24 @@
             timeLeft = mins * 60;
             document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            document.getElementById('mode-label').textContent = label;
+            document.getElementById('mode-display').textContent = label;
             document.getElementById('start-btn').textContent = "START";
-            document.getElementById('status-text').textContent = "System Ready";
+            document.getElementById('start-btn').style.background = "var(--primary)";
             render();
+            changeQuote();
         }
 
         function resetTimer() {
             document.querySelector('.mode-btn.active').click();
         }
 
+        function changeQuote() {
+            const q = quotes[Math.floor(Math.random() * quotes.length)];
+            document.getElementById('quote-text').textContent = `"${q}"`;
+        }
+
         function save() {
-            localStorage.setItem('ege_focus_v9', JSON.stringify(db));
+            localStorage.setItem('ege_lgs_v10', JSON.stringify(db));
             updateUI();
         }
 
@@ -286,7 +344,7 @@
             for(let i=6; i>=0; i--) {
                 const d = new Date(); d.setDate(d.getDate()-i);
                 const k = d.toISOString().split('T')[0];
-                labels.push(d.toLocaleDateString('tr-TR', {weekday: 'short'}));
+                labels.push(d.toLocaleDateString('en-US', {weekday: 'short'}));
                 const v = db.stats[k] || 0;
                 data.push(v); total += v;
             }
@@ -299,8 +357,9 @@
                     labels: labels,
                     datasets: [{
                         data: data,
-                        backgroundColor: '#8e7dff',
-                        borderRadius: 5
+                        backgroundColor: '#f39c12',
+                        borderRadius: 8,
+                        hoverBackgroundColor: '#e67e22'
                     }]
                 },
                 options: {
@@ -308,7 +367,7 @@
                     plugins: { legend: { display: false } },
                     scales: { 
                         y: { display: false, beginAtZero: true },
-                        x: { grid: { display: false }, ticks: { color: '#666' } }
+                        x: { grid: { display: false }, ticks: { color: '#999', font: {size: 11} } }
                     }
                 }
             });
