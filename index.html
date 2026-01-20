@@ -3,235 +3,371 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ege Kayaalp | Focus Pro V14</title>
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#f39c12">
+    <title>Ege Kayaalp </title>
+    
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
+    <meta name="theme-color" content="#3498db">
+    <link rel="manifest" id="pwa-manifest">
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&family=Montserrat:wght@900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
     <style>
-        :root { --primary: #f39c12; --bg: #f4f7f6; --card: #ffffff; --text-dark: #2d3436; --accent: #3498db; }
-        body { font-family: 'Poppins', sans-serif; background-color: var(--bg); color: var(--text-dark); margin: 0; padding: 15px; display: flex; justify-content: center; min-height: 100vh; }
-        .app-container { width: 100%; max-width: 480px; display: flex; flex-direction: column; gap: 15px; }
-        .card { background: var(--card); border-radius: 24px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        :root { --numeric: #3498db; --verbal: #f39c12; --focus: #9b59b6; --mola: #2ecc71; --bg: #f4f7f6; --card: #ffffff; --text: #2d3436; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: env(safe-area-inset-top) 15px 15px 15px; display: flex; justify-content: center; }
+        .app-container { width: 100%; max-width: 450px; display: flex; flex-direction: column; gap: 12px; }
+        .card { background: var(--card); border-radius: 20px; padding: 18px; box-shadow: 0 8px 25px rgba(0,0,0,0.04); position: relative; }
         
-        .user-name { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1.8rem; text-align: center; margin: 0; text-transform: uppercase; }
-        .user-name span { color: var(--primary); }
-        .timer-display { font-size: 6.5rem; font-weight: 800; text-align: center; margin: 10px 0; color: var(--text-dark); font-variant-numeric: tabular-nums; }
+        /* Language Toggle */
+        .lang-toggle { position: absolute; top: 15px; right: 15px; background: #eee; border: none; padding: 5px 10px; border-radius: 8px; font-size: 0.7rem; font-weight: 800; cursor: pointer; transition: 0.3s; }
         
-        .mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
-        .mode-btn { background: #f8f9fa; border: 1px solid #eee; padding: 12px; border-radius: 16px; cursor: pointer; font-weight: 600; color: #636e72; font-family: 'Poppins'; transition: 0.2s; }
-        .mode-btn.active { background: #fff; color: var(--primary); border-color: var(--primary); box-shadow: 0 4px 12px rgba(243, 156, 18, 0.15); }
+        .user-name { font-family: 'Montserrat'; font-size: 1.5rem; text-align: center; margin: 0; text-transform: uppercase; color: #3498db; }
+        .quote { font-size: 0.75rem; font-style: italic; color: #636e72; text-align: center; margin-top: 5px; min-height: 1.2rem; }
         
-        /* Custom Timer Input Area */
-        .custom-timer-row { display: flex; gap: 10px; margin-bottom: 20px; align-items: center; justify-content: center; }
-        .custom-input { width: 80px; padding: 10px; border-radius: 12px; border: 1px solid #eee; background: #f8f9fa; text-align: center; font-weight: 600; outline: none; font-family: 'Poppins'; }
-        .custom-set-btn { background: var(--text-dark); color: white; border: none; padding: 10px 15px; border-radius: 12px; cursor: pointer; font-size: 0.8rem; font-weight: 600; }
+        .timer-display { font-size: 5.5rem; font-weight: 800; text-align: center; margin: 5px 0; font-variant-numeric: tabular-nums; }
         
-        .main-btn { width: 100%; padding: 18px; border-radius: 18px; border: none; font-size: 1.2rem; font-weight: 800; cursor: pointer; background: var(--primary); color: white; box-shadow: 0 6px 15px rgba(243, 156, 18, 0.2); transition: 0.3s; }
-        .main-btn:active { transform: scale(0.98); }
+        .mode-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
+        .mode-btn { background: #f1f2f6; border: none; padding: 12px 2px; border-radius: 12px; cursor: pointer; font-size: 0.65rem; font-weight: 800; color: #a4b0be; text-transform: uppercase; transition: all 0.3s; opacity: 0.6; }
         
-        .todo-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #f8f9fa; }
-        .todo-item input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--primary); }
+        .mode-btn.active.num { background: var(--numeric); color: white; opacity: 1; box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3); }
+        .mode-btn.active.ver { background: var(--verbal); color: white; opacity: 1; box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3); }
+        .mode-btn.active.foc { background: var(--focus); color: white; opacity: 1; box-shadow: 0 4px 12px rgba(155, 89, 182, 0.3); }
+        .mode-btn.active.brk { background: var(--mola); color: white; opacity: 1; box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3); }
+        
+        .mode-indicator { text-align: center; font-size: 0.75rem; font-weight: 800; letter-spacing: 1px; padding-bottom: 5px; border-bottom: 3px solid var(--numeric); display: inline-block; transition: 0.3s; text-transform: uppercase; }
+        .indicator-wrap { text-align: center; margin-bottom: 10px; }
+
+        .main-btn { width: 100%; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: 800; cursor: pointer; color: white; transition: 0.3s; text-transform: uppercase; }
+        
+        .dash-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .dash-item { background: #f8f9fa; padding: 12px 2px; border-radius: 15px; text-align: center; border: 1px solid rgba(0,0,0,0.02); }
+        .dash-val { display: block; font-weight: 800; font-size: 0.9rem; margin-top: 2px; }
+        .dash-label { font-size: 0.55rem; color: #999; font-weight: 700; text-transform: uppercase; display: block; }
+
+        /* Calendar Styles */
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-top: 10px; }
+        .cal-day { font-size: 0.6rem; text-align: center; padding: 6px 0; background: #f9f9f9; border-radius: 6px; color: #dfe6e9; font-weight: 700; }
+        .cal-day.work { background: #e3f2fd; color: var(--numeric); border: 1px solid #bbdefb; }
+
+        #q-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px; }
+        .modal-content { background: white; padding: 25px; border-radius: 20px; width: 100%; max-width: 300px; text-align: center; }
+        .q-input { width: 100%; padding: 12px; margin: 15px 0; border-radius: 10px; border: 2px solid #eee; text-align: center; font-size: 1.2rem; font-weight: bold; }
+        
+        .todo-item { display: flex; align-items: center; gap: 10px; background: #f8f9fa; padding: 10px; border-radius: 12px; margin-bottom: 6px; font-size: 0.85rem; }
     </style>
 </head>
 <body>
 
-    <div class="app-container" id="main-app">
-        <div class="card" style="text-align: center;">
-            <h1 class="user-name">EGE <span>KAYAALP</span></h1>
-            <div id="quote-text" style="font-size:0.85rem; font-style:italic; color:#636e72; margin-top:5px;">"Your hard work will pay off."</div>
+    <div id="q-modal">
+        <div class="modal-content">
+            <h3 style="margin:0" id="modal-title">Oturum Tamam!</h3>
+            <p id="q-modal-desc" style="font-size:0.8rem; color:#666">Kaç soru çözdün?</p>
+            <input type="number" id="q-count" class="q-input" placeholder="0" autofocus>
+            <button onclick="submitQuestions()" class="main-btn" id="modal-submit-btn">KAYDET</button>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <div class="card">
+            <button class="lang-toggle" id="lang-btn" onclick="toggleLang()">TR</button>
+            <h1 class="user-name">EGE <span style="color:#2d3436">KAYAALP</span></h1>
+            <div id="quote-text" class="quote">"Analyze your past, build your future."</div>
         </div>
 
-        <div class="card" style="text-align: center;">
-            <div class="timer-display" id="timer">25:00</div>
-            <div id="mode-display" style="font-size:0.85rem; color:#636e72; font-weight: 600; letter-spacing: 1px;">FOCUS SESSION</div>
+        <div class="card">
+            <div class="timer-display" id="timer">80:00</div>
+            <div class="indicator-wrap">
+                <div id="mode-display" class="mode-indicator">NUMERIC SESSION</div>
+            </div>
         </div>
 
         <div class="card">
             <div class="mode-grid">
-                <button class="mode-btn active" onclick="setMode(25, 'FOCUS SESSION', this)">Focus</button>
-                <button class="mode-btn" onclick="setMode(5, 'SHORT BREAK', this)">Break</button>
-                <button class="mode-btn" onclick="setMode(75, 'VERBAL SESSION', this)">Verbal</button>
-                <button class="mode-btn" onclick="setMode(80, 'NUMERIC SESSION', this)">Numeric</button>
+                <button class="mode-btn active num" id="m-num" onclick="setMode(80, 'NUMERIC', this, 'NUM')">Numeric</button>
+                <button class="mode-btn ver" id="m-ver" onclick="setMode(75, 'VERBAL', this, 'VER')">Verbal</button>
+                <button class="mode-btn foc" id="m-foc" onclick="setMode(25, 'FOCUS', this, 'FOC')">Focus</button>
+                <button class="mode-btn brk" id="m-brk" onclick="setMode(5, 'BREAK', this, 'BRK')">Break</button>
             </div>
-            
-            <div class="custom-timer-row">
-                <input type="number" id="custom-min" class="custom-input" placeholder="Min" min="1" max="180">
-                <button onclick="setCustomTime()" class="custom-set-btn">SET CUSTOM</button>
+            <div style="display:flex; gap:10px; margin-bottom:12px">
+                <input type="number" id="custom-min" style="width:65px; border-radius:10px; border:1px solid #eee; padding:5px; text-align:center" placeholder="Min">
+                <button onclick="setCustom()" id="btn-custom" style="background:#2d3436; color:white; border:none; border-radius:10px; font-size:0.7rem; font-weight:700; flex:1">SET CUSTOM</button>
             </div>
-
-            <button class="main-btn" id="start-btn" onclick="toggleTimer()">START</button>
-            <div style="text-align: center; margin-top: 15px;">
-                <span onclick="resetTimer()" style="color: #999; font-size: 0.75rem; cursor: pointer; text-decoration: underline;">Reset Timer</span>
-            </div>
+            <button class="main-btn" id="start-btn" style="background:var(--numeric);" onclick="toggleTimer()">START SESSION</button>
         </div>
 
-        <div class="card">
-            <div style="font-size:0.95rem; font-weight:800; margin-bottom:12px;">Daily Targets</div>
-            <div style="display:flex; gap:8px; margin-bottom:15px;">
-                <input type="text" id="task-in" style="flex:1; background:#f8f9fa; border:1px solid #eee; padding:12px; border-radius:12px; outline:none;" placeholder="New goal...">
-                <button onclick="addTask()" style="background:var(--accent); border:none; color:white; padding:0 15px; border-radius:12px; cursor:pointer; font-weight:bold;">+</button>
+        <div class="card dash-grid">
+            <div class="dash-item" style="border-left: 4px solid var(--numeric)">
+                <span class="dash-label" id="lbl-num-t">🔢 Num Time</span><span class="dash-val" id="total-num">0m</span>
             </div>
-            <div id="task-list"></div>
+            <div class="dash-item">
+                <span class="dash-label" id="lbl-num-q">📝 Num Q</span><span class="dash-val" id="q-num">0</span>
+            </div>
+            <div class="dash-item">
+                <span class="dash-label" id="lbl-num-s">⚡ Num Speed</span><span class="dash-val" id="speed-num">0s</span>
+            </div>
+
+            <div class="dash-item" style="border-left: 4px solid var(--verbal)">
+                <span class="dash-label" id="lbl-ver-t">🔡 Ver Time</span><span class="dash-val" id="total-ver">0m</span>
+            </div>
+            <div class="dash-item">
+                <span class="dash-label" id="lbl-ver-q">📝 Ver Q</span><span class="dash-val" id="q-ver">0</span>
+            </div>
+            <div class="dash-item">
+                <span class="dash-label" id="lbl-ver-s">⚡ Ver Speed</span><span class="dash-val" id="speed-ver">0s</span>
+            </div>
+
+            <div class="dash-item"><span class="dash-label" id="lbl-foc">🧠 Focus</span><span class="dash-val" id="total-foc">0m</span></div>
+            <div class="dash-item"><span class="dash-label" id="lbl-brk">☕ Break</span><span class="dash-val" id="total-brk">0m</span></div>
+            <div class="dash-item"><span class="dash-label" id="lbl-str">🔥 Streak</span><span class="dash-val" id="streak">0</span></div>
         </div>
 
         <div class="card">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                <span style="font-weight:800;">Weekly Stats</span>
-                <span style="font-size:1.5rem; font-weight:800; color:var(--primary);" id="week-total">0</span>
+                <span style="font-weight:800; font-size:0.8rem;" id="lbl-weekly">Weekly Progress</span>
+                <span id="date-range" style="font-size:0.65rem; color:#999; font-weight:600;"></span>
             </div>
-            <div style="height:150px;"><canvas id="chart"></canvas></div>
+            <div style="height:160px;"><canvas id="chart"></canvas></div>
+        </div>
+
+        <div class="card">
+            <div style="font-size:0.7rem; font-weight:800; margin-bottom:10px; color:#2d3436" id="lbl-cal">STUDY CALENDAR</div>
+            <div class="calendar-grid" id="calendar-body"></div>
+        </div>
+
+        <div class="card">
+            <div style="display:flex; gap:8px; margin-bottom:10px;">
+                <input type="text" id="task-in" style="flex:1; border:none; background:#f8f9fa; padding:10px; border-radius:10px; outline:none" placeholder="Daily target...">
+                <button onclick="addTask()" style="background:var(--numeric); border:none; color:white; width:40px; border-radius:10px; font-weight:bold">+</button>
+            </div>
+            <div id="task-list"></div>
         </div>
     </div>
 
-    <audio id="beep" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg"></audio>
-
     <script>
-        // Service Worker for PWA
-        if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
+        // PWA Config
+        const manifest = { "name": "Ege LGS Master", "short_name": "LGSMaster", "start_url": ".", "display": "standalone", "background_color": "#f4f7f6", "theme_color": "#3498db", "icons": [{"src": "https://cdn-icons-png.flaticon.com/512/3406/3406831.png", "sizes": "512x512", "type": "image/png"}]};
+        document.querySelector('#pwa-manifest').setAttribute('href', 'data:application/json;base64,' + btoa(JSON.stringify(manifest)));
+        if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('data:text/javascript;base64,' + btoa('self.addEventListener("fetch", (e) => {});')); }); }
 
-        // Local Storage Database
-        let db = JSON.parse(localStorage.getItem('ege_focus_data')) || { stats: {}, tasks: [] };
+        let currentLang = localStorage.getItem('ege_lang') || 'EN';
+        const langData = {
+            'EN': {
+                quote: '"Analyze your past, build your future."',
+                num: 'Numeric', ver: 'Verbal', foc: 'Focus', brk: 'Break',
+                custom: 'SET CUSTOM', start: 'START SESSION', stop: 'STOP SESSION', resume: 'RESUME',
+                lbl_num_t: '🔢 Num Time', lbl_num_q: '📝 Num Q', lbl_num_s: '⚡ Num Speed',
+                lbl_ver_t: '🔡 Ver Time', lbl_ver_q: '📝 Ver Q', lbl_ver_s: '⚡ Ver Speed',
+                lbl_foc: '🧠 Focus', lbl_brk: '☕ Break', lbl_str: '🔥 Streak',
+                weekly: 'Weekly Progress', cal: 'STUDY CALENDAR', modal_t: 'Session Complete!',
+                modal_d: 'How many questions did you solve?', save: 'SAVE DATA', placeholder: 'Daily target...'
+            },
+            'TR': {
+                quote: '"Geçmişini analiz et, geleceğini inşa et."',
+                num: 'Sayısal', ver: 'Sözel', foc: 'Odak', brk: 'Mola',
+                custom: 'SÜRE AYARLA', start: 'OTURUMU BAŞLAT', stop: 'OTURUMU DURDUR', resume: 'DEVAM ET',
+                lbl_num_t: '🔢 Sayısal Süre', lbl_num_q: '📝 Sayısal Soru', lbl_num_s: '⚡ Sayısal Hız',
+                lbl_ver_t: '🔡 Sözel Süre', lbl_ver_q: '📝 Sözel Soru', lbl_ver_s: '⚡ Sözel Hız',
+                lbl_foc: '🧠 Odak', lbl_brk: '☕ Mola', lbl_str: '🔥 Seri',
+                weekly: 'Haftalık Gelişim', cal: 'ÇALIŞMA TAKVİMİ', modal_t: 'Oturum Tamam!',
+                modal_d: 'Kaç soru çözdün?', save: 'KAYDET', placeholder: 'Günlük hedef...'
+            }
+        };
+
+        let db = JSON.parse(localStorage.getItem('ege_v25_db')) || { 
+            num: {}, ver: {}, foc: {}, brk: {}, q_num: {}, q_ver: {}, 
+            tasks: [], streak: 0, lastActiveDate: null 
+        };
         
-        let timeLeft = 25 * 60;
-        let isRunning = false;
-        let timerId = null;
-        let endTime = null;
-        let myChart = null;
+        let timeLeft = 80 * 60, isRunning = false, timerId = null, endTime = null, myChart = null;
+        let curMins = 80, selectedCat = 'NUM', audioCtx = null;
 
-        const quotes = [
-            "Believe in yourself.",
-            "Focus determines your reality.",
-            "Success is earned, not given.",
-            "Keep pushing Ege, you're doing great!",
-            "Study now, be a champion later.",
-            "Small steps every day lead to big results."
-        ];
+        function toggleLang() {
+            currentLang = currentLang === 'EN' ? 'TR' : 'EN';
+            localStorage.setItem('ege_lang', currentLang);
+            updateLangUI();
+        }
+
+        function updateLangUI() {
+            const l = langData[currentLang];
+            document.getElementById('lang-btn').textContent = currentLang === 'EN' ? 'TR' : 'EN';
+            document.getElementById('quote-text').textContent = l.quote;
+            document.getElementById('m-num').textContent = l.num;
+            document.getElementById('m-ver').textContent = l.ver;
+            document.getElementById('m-foc').textContent = l.foc;
+            document.getElementById('m-brk').textContent = l.brk;
+            document.getElementById('btn-custom').textContent = l.custom;
+            document.getElementById('lbl-num-t').textContent = l.lbl_num_t;
+            document.getElementById('lbl-num-q').textContent = l.lbl_num_q;
+            document.getElementById('lbl-num-s').textContent = l.lbl_num_s;
+            document.getElementById('lbl-ver-t').textContent = l.lbl_ver_t;
+            document.getElementById('lbl-ver-q').textContent = l.lbl_ver_q;
+            document.getElementById('lbl-ver-s').textContent = l.lbl_ver_s;
+            document.getElementById('lbl-foc').textContent = l.lbl_foc;
+            document.getElementById('lbl-brk').textContent = l.lbl_brk;
+            document.getElementById('lbl-str').textContent = l.lbl_str;
+            document.getElementById('lbl-weekly').textContent = l.weekly;
+            document.getElementById('lbl-cal').textContent = l.cal;
+            document.getElementById('modal-title').textContent = l.modal_t;
+            document.getElementById('q-modal-desc').textContent = l.modal_d;
+            document.getElementById('modal-submit-btn').textContent = l.save;
+            document.getElementById('task-in').placeholder = l.placeholder;
+            
+            const activeLabel = document.querySelector('.mode-btn.active').textContent.toUpperCase();
+            document.getElementById('mode-display').textContent = activeLabel + " SESSION";
+            if (!isRunning) document.getElementById('start-btn').textContent = l.start;
+        }
+
+        function playBeep() {
+            if (!audioCtx) audioCtx = new AudioContext();
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain); gain.connect(audioCtx.destination);
+            osc.frequency.setValueAtTime(880, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1);
+            osc.start(); osc.stop(audioCtx.currentTime + 1);
+        }
 
         function toggleTimer() {
+            if (!audioCtx) audioCtx = new AudioContext();
             const btn = document.getElementById('start-btn');
+            const l = langData[currentLang];
             if (isRunning) {
                 isRunning = false; clearInterval(timerId);
                 timeLeft = Math.max(0, Math.round((endTime - Date.now()) / 1000));
-                btn.textContent = "RESUME";
-                btn.style.background = "var(--accent)";
+                btn.textContent = l.resume;
             } else {
-                isRunning = true;
-                endTime = Date.now() + (timeLeft * 1000);
-                timerId = setInterval(update, 100);
-                btn.textContent = "STOP";
-                btn.style.background = "#e74c3c";
-            }
-            changeQuote();
-        }
-
-        function update() {
-            const remain = Math.max(0, Math.round((endTime - Date.now()) / 1000));
-            if (remain !== timeLeft) {
-                timeLeft = remain;
-                const m = Math.floor(timeLeft / 60); const s = timeLeft % 60;
-                document.getElementById('timer').textContent = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-                if (timeLeft <= 0) { clearInterval(timerId); complete(); }
+                isRunning = true; endTime = Date.now() + (timeLeft * 1000);
+                timerId = setInterval(() => {
+                    timeLeft = Math.max(0, Math.round((endTime - Date.now()) / 1000));
+                    document.getElementById('timer').textContent = `${Math.floor(timeLeft/60).toString().padStart(2,'0')}:${(timeLeft%60).toString().padStart(2,'0')}`;
+                    if (timeLeft <= 0) { clearInterval(timerId); complete(); }
+                }, 100);
+                btn.textContent = l.stop;
             }
         }
 
         function complete() {
-            const mode = document.getElementById('mode-display').textContent;
-            if (!mode.includes("BREAK")) {
-                const day = new Date().toISOString().split('T')[0];
-                db.stats[day] = (db.stats[day] || 0) + 1;
-                saveDB();
+            const day = new Date().toISOString().split('T')[0];
+            if (selectedCat === 'NUM') db.num[day] = (db.num[day] || 0) + curMins;
+            else if (selectedCat === 'VER') db.ver[day] = (db.ver[day] || 0) + curMins;
+            else if (selectedCat === 'FOC') db.foc[day] = (db.foc[day] || 0) + curMins;
+            else if (selectedCat === 'BRK') db.brk[day] = (db.brk[day] || 0) + curMins;
+            
+            if (selectedCat !== 'BRK' && db.lastActiveDate !== day) {
+                db.streak++;
+                db.lastActiveDate = day;
             }
-            document.getElementById('beep').play();
-            alert("Great work Ege! Session complete.");
-            resetTimer();
+            save(); playBeep();
+            if(selectedCat === 'NUM' || selectedCat === 'VER') {
+                document.getElementById('modal-submit-btn').style.background = selectedCat === 'NUM' ? 'var(--numeric)' : 'var(--verbal)';
+                document.getElementById('q-modal').style.display = 'flex';
+            } else { reset(); }
         }
 
-        function setMode(mins, label, btn) {
+        function submitQuestions() {
+            const day = new Date().toISOString().split('T')[0];
+            const count = parseInt(document.getElementById('q-count').value) || 0;
+            if (selectedCat === 'NUM') db.q_num[day] = (db.q_num[day] || 0) + count;
+            if (selectedCat === 'VER') db.q_ver[day] = (db.q_ver[day] || 0) + count;
+            document.getElementById('q-modal').style.display = 'none';
+            document.getElementById('q-count').value = '';
+            save(); reset();
+        }
+
+        function setMode(mins, label, btn, cat) {
             isRunning = false; clearInterval(timerId);
-            timeLeft = mins * 60;
-            document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-            if(btn) btn.classList.add('active');
-            document.getElementById('mode-display').textContent = label;
+            timeLeft = mins * 60; curMins = mins; selectedCat = cat;
+            document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active', 'num', 'ver', 'foc', 'brk'));
+            btn.classList.add('active', cat.toLowerCase());
+            const colors = { 'NUM': 'var(--numeric)', 'VER': 'var(--verbal)', 'FOC': 'var(--focus)', 'BRK': 'var(--mola)' };
+            document.getElementById('start-btn').style.background = colors[cat];
+            document.getElementById('mode-display').style.borderColor = colors[cat];
+            document.getElementById('mode-display').textContent = langData[currentLang][cat.toLowerCase()].toUpperCase() + " SESSION";
             document.getElementById('timer').textContent = `${mins.toString().padStart(2,'0')}:00`;
-            document.getElementById('start-btn').textContent = "START";
-            document.getElementById('start-btn').style.background = "var(--primary)";
+            document.getElementById('start-btn').textContent = langData[currentLang].start;
         }
 
-        function setCustomTime() {
-            const val = document.getElementById('custom-min').value;
-            if(val > 0 && val <= 180) {
-                setMode(parseInt(val), 'CUSTOM FOCUS SESSION', null);
-                document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-            } else {
-                alert("Please enter minutes between 1-180.");
+        function setCustom() {
+            const val = parseInt(document.getElementById('custom-min').value);
+            if(val > 0) {
+                timeLeft = val * 60; curMins = val;
+                document.getElementById('timer').textContent = `${val.toString().padStart(2,'0')}:00`;
             }
         }
 
-        function resetTimer() { 
+        function reset() { 
             const activeBtn = document.querySelector('.mode-btn.active');
-            if(activeBtn) activeBtn.click(); else setMode(25, 'FOCUS SESSION', null);
+            setMode(curMins, activeBtn.textContent, activeBtn, selectedCat); 
         }
 
-        function changeQuote() { 
-            document.getElementById('quote-text').textContent = `"${quotes[Math.floor(Math.random()*quotes.length)]}"`; 
-        }
+        function save() { localStorage.setItem('ege_v25_db', JSON.stringify(db)); update(); }
 
-        function saveDB() {
-            localStorage.setItem('ege_focus_data', JSON.stringify(db));
-            updateUI();
-        }
+        function update() {
+            const sum = (obj) => Object.values(obj || {}).reduce((a,b)=>a+b,0);
+            const tN = sum(db.num), tV = sum(db.ver), tF = sum(db.foc), tB = sum(db.brk);
+            const qN = sum(db.q_num || {}), qV = sum(db.q_ver || {});
+            
+            document.getElementById('total-num').textContent = tN + "m";
+            document.getElementById('total-ver').textContent = tV + "m";
+            document.getElementById('total-foc').textContent = tF + "m";
+            document.getElementById('total-brk').textContent = tB + "m";
+            document.getElementById('q-num').textContent = qN;
+            document.getElementById('q-ver').textContent = qV;
+            document.getElementById('streak').textContent = db.streak || 0;
+            document.getElementById('speed-num').textContent = qN > 0 ? ((tN * 60) / qN).toFixed(1) + "s" : "0s";
+            document.getElementById('speed-ver').textContent = qV > 0 ? ((tV * 60) / qV).toFixed(1) + "s" : "0s";
 
-        function updateUI() {
-            const list = document.getElementById('task-list');
-            list.innerHTML = '';
+            const list = document.getElementById('task-list'); list.innerHTML = '';
             (db.tasks || []).forEach((t, i) => {
-                const div = document.createElement('div'); div.className = 'todo-item';
-                div.innerHTML = `<input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${i})"> 
-                                <span style="${t.done?'text-decoration:line-through;opacity:0.5':''}">${t.txt}</span>`;
-                list.appendChild(div);
+                const d = document.createElement('div'); d.className = 'todo-item';
+                d.innerHTML = `<input type="checkbox" ${t.done?'checked':''} onchange="db.tasks[${i}].done=!db.tasks[${i}].done;save()"> <span style="${t.done?'text-decoration:line-through;opacity:0.5':''}">${t.txt}</span>`;
+                list.appendChild(d);
             });
-            updateChart();
+            drawChart();
+            renderCalendar();
         }
 
-        function updateChart() {
+        function renderCalendar() {
+            const body = document.getElementById('calendar-body'); body.innerHTML = '';
+            const now = new Date();
+            const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+            for(let i=1; i<=daysInMonth; i++) {
+                const key = `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2,'0')}-${i.toString().padStart(2,'0')}`;
+                const active = (db.num && db.num[key]) || (db.ver && db.ver[key]);
+                const el = document.createElement('div');
+                el.className = `cal-day ${active ? 'work' : ''}`; el.textContent = i;
+                body.appendChild(el);
+            }
+        }
+
+        function drawChart() {
             const ctx = document.getElementById('chart').getContext('2d');
-            const labels = []; const data = []; let total = 0;
+            const labels = [], nD = [], vD = [], fD = [], bD = [];
             for(let i=6; i>=0; i--) {
                 const d = new Date(); d.setDate(d.getDate()-i);
                 const k = d.toISOString().split('T')[0];
-                labels.push(d.toLocaleDateString('en-US', {weekday: 'short'}));
-                const v = db.stats[k] || 0;
-                data.push(v); total += v;
+                labels.push(`${d.getDate()} ${d.toLocaleDateString(currentLang === 'EN' ? 'en-US' : 'tr-TR',{month:'short'})}`);
+                nD.push(db.num[k]||0); vD.push(db.ver[k]||0); fD.push(db.foc[k]||0); bD.push(db.brk[k]||0);
             }
-            document.getElementById('week-total').textContent = total;
             if(myChart) myChart.destroy();
             myChart = new Chart(ctx, {
-                type: 'bar', data: { labels, datasets: [{ data, backgroundColor: '#f39c12', borderRadius: 8 }] },
-                options: { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { display: false, beginAtZero: true }, x: { grid: { display: false } } } }
+                type: 'bar', data: { labels, datasets: [
+                    { label: 'Numeric', data: nD, backgroundColor: '#3498db', borderRadius: 4 },
+                    { label: 'Verbal', data: vD, backgroundColor: '#f39c12', borderRadius: 4 },
+                    { label: 'Focus', data: fD, backgroundColor: '#9b59b6', borderRadius: 4 },
+                    { label: 'Break', data: bD, backgroundColor: '#2ecc71', borderRadius: 4 }
+                ]},
+                options: { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false }, ticks: { font: { size: 8 } } } } }
             });
         }
 
         function addTask() {
             const inp = document.getElementById('task-in');
-            if(!inp.value.trim()) return;
-            db.tasks.push({ txt: inp.value, done: false });
-            saveDB();
-            inp.value = '';
+            if(inp.value) { if(!db.tasks) db.tasks = []; db.tasks.push({txt: inp.value, done: false}); save(); inp.value = ''; }
         }
-
-        function toggleTask(i) {
-            db.tasks[i].done = !db.tasks[i].done;
-            saveDB();
-        }
-
-        // Initialize
-        updateUI();
-        changeQuote();
+        
+        update();
+        updateLangUI();
     </script>
 </body>
 </html>
