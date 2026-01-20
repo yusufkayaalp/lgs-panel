@@ -3,194 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ege Kayaalp | Focus Pro V10</title>
+    <title>Ege Kayaalp | Secure Focus V13</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#f39c12">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&family=Montserrat:wght@900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
+    
     <style>
-        :root {
-            --primary: #f39c12; /* Enerjik Turuncu */
-            --bg: #f4f7f6; /* Ferah Arka Plan */
-            --card: #ffffff;
-            --text-dark: #2d3436;
-            --text-light: #636e72;
-            --accent: #3498db;
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg);
-            color: var(--text-dark);
-            margin: 0;
-            padding: 15px;
-            display: flex;
-            justify-content: center;
-            min-height: 100vh;
-        }
-
-        .app-container {
-            width: 100%;
-            max-width: 480px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .card {
-            background: var(--card);
-            border-radius: 24px;
-            padding: 20px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            border: 1px solid rgba(0,0,0,0.02);
-        }
-
-        /* HEADER & NAME */
-        .header-card {
-            text-align: center;
-            padding: 15px;
-            background: white;
-        }
-
-        .user-name {
-            font-family: 'Montserrat', sans-serif;
-            font-weight: 900;
-            font-size: 1.8rem;
-            letter-spacing: -1px;
-            color: var(--text-dark);
-            margin: 0;
-            text-transform: uppercase;
-        }
-
-        .user-name span {
-            color: var(--primary);
-        }
-
-        .quote-box {
-            font-size: 0.85rem;
-            color: var(--text-light);
-            font-style: italic;
-            margin-top: 5px;
-            min-height: 40px;
-        }
-
-        /* TIMER SECTION */
-        .timer-card {
-            text-align: center;
-            padding: 30px 10px;
-        }
-
-        .timer-display {
-            font-size: 6.5rem;
-            font-weight: 800;
-            color: var(--text-dark);
-            line-height: 1;
-            margin: 10px 0;
-            font-variant-numeric: tabular-nums;
-        }
-
-        .status-dot {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            background: var(--primary);
-            border-radius: 50%;
-            margin-right: 5px;
-        }
-
-        /* CONTROLS */
-        .mode-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .mode-btn {
-            background: #f8f9fa;
-            border: 1px solid #eee;
-            color: var(--text-light);
-            padding: 12px;
-            border-radius: 16px;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.85rem;
-            transition: 0.2s;
-        }
-
-        .mode-btn.active {
-            background: #fff;
-            color: var(--primary);
-            border-color: var(--primary);
-            box-shadow: 0 4px 12px rgba(243, 156, 18, 0.15);
-        }
-
-        .main-btn {
-            width: 100%;
-            padding: 18px;
-            border-radius: 18px;
-            border: none;
-            font-size: 1.2rem;
-            font-weight: 800;
-            cursor: pointer;
-            background: var(--primary);
-            color: white;
-            box-shadow: 0 8px 20px rgba(243, 156, 18, 0.3);
-            transition: 0.3s;
-        }
-
-        .main-btn:active { transform: scale(0.98); }
-
-        /* TARGETS */
-        .task-input-group {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 15px;
-        }
-
-        .task-input-group input {
-            flex: 1;
-            background: #f8f9fa;
-            border: 1px solid #eee;
-            padding: 12px;
-            border-radius: 12px;
-            outline: none;
-            font-family: 'Poppins';
-        }
-
-        .todo-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 10px 0;
-            border-bottom: 1px solid #f8f9fa;
-        }
-
-        /* STATS (BOTTOM) */
-        .stats-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        @media (max-width: 400px) {
-            .timer-display { font-size: 5rem; }
-        }
+        :root { --primary: #f39c12; --bg: #f4f7f6; --card: #ffffff; --text-dark: #2d3436; --accent: #3498db; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg); color: var(--text-dark); margin: 0; padding: 15px; display: flex; justify-content: center; min-height: 100vh; }
+        .app-container { width: 100%; max-width: 480px; display: flex; flex-direction: column; gap: 15px; }
+        .card { background: var(--card); border-radius: 24px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        
+        #login-screen { position: fixed; inset: 0; background: var(--bg); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .login-card { width: 100%; max-width: 350px; text-align: center; }
+        .login-input { width: 100%; padding: 12px; margin: 8px 0; border-radius: 12px; border: 1px solid #ddd; box-sizing: border-box; font-family: 'Poppins'; }
+        
+        .user-name { font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1.8rem; text-align: center; margin: 0; text-transform: uppercase; }
+        .user-name span { color: var(--primary); }
+        .timer-display { font-size: 6.5rem; font-weight: 800; text-align: center; margin: 10px 0; color: var(--text-dark); }
+        
+        .mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+        .mode-btn { background: #f8f9fa; border: 1px solid #eee; padding: 12px; border-radius: 16px; cursor: pointer; font-weight: 600; color: #636e72; font-family: 'Poppins'; }
+        .mode-btn.active { background: #fff; color: var(--primary); border-color: var(--primary); box-shadow: 0 4px 12px rgba(243, 156, 18, 0.15); }
+        
+        /* Custom Timer Input Area */
+        .custom-timer-row { display: flex; gap: 10px; margin-bottom: 20px; align-items: center; justify-content: center; }
+        .custom-input { width: 80px; padding: 10px; border-radius: 12px; border: 1px solid #eee; background: #f8f9fa; text-align: center; font-weight: 600; outline: none; font-family: 'Poppins'; }
+        .custom-set-btn { background: var(--text-dark); color: white; border: none; padding: 10px 15px; border-radius: 12px; cursor: pointer; font-size: 0.8rem; font-weight: 600; transition: 0.2s; }
+        
+        .main-btn { width: 100%; padding: 18px; border-radius: 18px; border: none; font-size: 1.2rem; font-weight: 800; cursor: pointer; background: var(--primary); color: white; box-shadow: 0 6px 15px rgba(243, 156, 18, 0.2); }
+        .todo-item { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid #f8f9fa; }
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-    <div class="app-container">
-        <div class="card header-card">
+    <div id="login-screen">
+        <div class="card login-card">
+            <h2 style="margin-top:0">Ege Kayaalp <span>Login</span></h2>
+            <input type="email" id="login-email" class="login-input" placeholder="Email (ege@lgs.com)">
+            <input type="password" id="login-pass" class="login-input" placeholder="Password">
+            <button onclick="handleLogin()" class="main-btn" style="margin-top:10px">UNLOCK APP</button>
+            <p id="login-error" style="color:red; font-size:0.8rem; margin-top:10px;"></p>
+        </div>
+    </div>
+
+    <div class="app-container hidden" id="main-app">
+        <div class="card" style="text-align: center;">
             <h1 class="user-name">EGE <span>KAYAALP</span></h1>
-            <div id="quote-text" class="quote-box">"Believe in yourself. You are capable of amazing things."</div>
+            <div id="quote-text" style="font-size:0.85rem; font-style:italic; color:#636e72; margin-top:5px;">"Focus determines your reality."</div>
         </div>
 
-        <div class="card timer-card">
-            <div style="font-size: 0.75rem; font-weight: 600; color: var(--text-light); letter-spacing: 2px;">
-                <span class="status-dot"></span> FOCUS SESSION
-            </div>
+        <div class="card" style="text-align: center;">
             <div class="timer-display" id="timer">25:00</div>
-            <div style="font-size: 0.85rem; color: var(--text-light);" id="mode-display">Time to Study</div>
+            <div id="mode-display" style="font-size:0.85rem; color:#636e72;">Ready to Work</div>
         </div>
 
         <div class="card">
@@ -200,194 +73,187 @@
                 <button class="mode-btn" onclick="setMode(75, 'Verbal Session', this)">Verbal</button>
                 <button class="mode-btn" onclick="setMode(80, 'Numeric Session', this)">Numeric</button>
             </div>
+            
+            <div class="custom-timer-row">
+                <input type="number" id="custom-min" class="custom-input" placeholder="Min" min="1" max="180">
+                <button onclick="setCustomTime()" class="custom-set-btn">SET CUSTOM</button>
+            </div>
+
             <button class="main-btn" id="start-btn" onclick="toggleTimer()">START</button>
-            <div style="text-align: center; margin-top: 15px;">
-                <span onclick="resetTimer()" style="color: var(--text-light); font-size: 0.75rem; cursor: pointer; opacity: 0.7;">Reset Timer / Sıfırla</span>
-            </div>
         </div>
 
         <div class="card">
-            <div style="font-size: 0.95rem; font-weight: 800; margin-bottom: 12px; color: var(--text-dark);">Today's Targets</div>
-            <div class="task-input-group">
-                <input type="text" id="task-in" placeholder="Add a goal...">
-                <button onclick="addTask()" style="background: var(--accent); border:none; color:white; padding:0 15px; border-radius:12px; cursor:pointer; font-weight:bold;">+</button>
+            <div style="font-size:0.95rem; font-weight:800; margin-bottom:12px;">Daily Targets</div>
+            <div style="display:flex; gap:8px; margin-bottom:15px;">
+                <input type="text" id="task-in" style="flex:1; background:#f8f9fa; border:1px solid #eee; padding:12px; border-radius:12px; outline:none;" placeholder="New goal...">
+                <button onclick="addTask()" style="background:var(--accent); border:none; color:white; padding:0 15px; border-radius:12px; cursor:pointer;">+</button>
             </div>
-            <div id="task-list" style="max-height: 150px; overflow-y: auto;"></div>
+            <div id="task-list"></div>
         </div>
 
         <div class="card">
-            <div class="stats-header">
-                <span style="font-size: 0.95rem; font-weight: 800;">Weekly Stats</span>
-                <span style="font-size: 1.5rem; font-weight: 800; color: var(--primary);" id="week-total">0</span>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <span style="font-weight:800;">Weekly Stats</span>
+                <span style="font-size:1.5rem; font-weight:800; color:var(--primary);" id="week-total">0</span>
             </div>
-            <div style="height: 160px;">
-                <canvas id="chart"></canvas>
-            </div>
+            <div style="height:150px;"><canvas id="chart"></canvas></div>
+            <button onclick="logout()" style="background:none; border:none; color:#999; font-size:0.7rem; cursor:pointer; width:100%; margin-top:15px; text-decoration:underline;">Logout</button>
         </div>
     </div>
 
     <audio id="beep" src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg"></audio>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('ege_lgs_v10')) || { stats: {}, tasks: [] };
+        if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js'); }
+
+        // --- FIREBASE CONFIG (Senin bilgilerini gir) ---
+        const firebaseConfig = {
+            apiKey: "SENIN_API_KEYIN",
+            databaseURL: "SENIN_DATABASE_URLIN",
+            projectId: "focus-1ba6d",
+            appId: "SENIN_APP_IDN"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const database = firebase.database();
+        let userRef = null;
+
+        let localData = { stats: {}, tasks: [] };
         let timeLeft = 25 * 60;
         let isRunning = false;
         let timerId = null;
         let endTime = null;
         let myChart = null;
 
-        const quotes = [
-            "Believe in yourself. You are capable of amazing things.",
-            "Success is the sum of small efforts, repeated daily.",
-            "Focus on being productive instead of busy.",
-            "Your only limit is your mind. Keep pushing Ege!",
-            "Don't stop until you're proud of yourself.",
-            "The future depends on what you do today.",
-            "Study now, be a champion later."
-        ];
+        const quotes = ["Believe in yourself.", "Focus on your goals.", "Success needs effort.", "Keep going Ege!"];
 
-        if ("Notification" in window) Notification.requestPermission();
+        function handleLogin() {
+            const email = document.getElementById('login-email').value;
+            const pass = document.getElementById('login-pass').value;
+            auth.signInWithEmailAndPassword(email, pass).catch(err => {
+                document.getElementById('login-error').textContent = "Hatalı giriş!";
+            });
+        }
+
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('main-app').classList.remove('hidden');
+                userRef = database.ref('users/' + user.uid);
+                userRef.on('value', snapshot => {
+                    const data = snapshot.val();
+                    if(data) { localData = data; updateUI(); }
+                });
+            } else {
+                document.getElementById('login-screen').classList.remove('hidden');
+                document.getElementById('main-app').classList.add('hidden');
+            }
+        });
+
+        function logout() { auth.signOut(); }
 
         function toggleTimer() {
             const btn = document.getElementById('start-btn');
             if (isRunning) {
-                isRunning = false;
-                clearInterval(timerId);
+                isRunning = false; clearInterval(timerId);
                 timeLeft = Math.max(0, Math.round((endTime - Date.now()) / 1000));
                 btn.textContent = "RESUME";
-                btn.style.background = "var(--accent)";
             } else {
                 isRunning = true;
                 endTime = Date.now() + (timeLeft * 1000);
                 timerId = setInterval(update, 100);
                 btn.textContent = "STOP";
-                btn.style.background = "#e74c3c"; // Durunca kırmızımsı
             }
-            changeQuote();
+            document.getElementById('quote-text').textContent = `"${quotes[Math.floor(Math.random()*quotes.length)]}"`;
         }
 
         function update() {
-            const now = Date.now();
-            const remain = Math.max(0, Math.round((endTime - now) / 1000));
+            const remain = Math.max(0, Math.round((endTime - Date.now()) / 1000));
             if (remain !== timeLeft) {
                 timeLeft = remain;
-                render();
-                if (timeLeft <= 0) {
-                    clearInterval(timerId);
-                    complete();
-                }
+                const m = Math.floor(timeLeft / 60); const s = timeLeft % 60;
+                document.getElementById('timer').textContent = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+                if (timeLeft <= 0) { clearInterval(timerId); complete(); }
             }
-        }
-
-        function render() {
-            const m = Math.floor(timeLeft / 60);
-            const s = timeLeft % 60;
-            document.getElementById('timer').textContent = `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
         }
 
         function complete() {
-            document.getElementById('beep').play();
-            if (Notification.permission === "granted") new Notification("Well done Ege!", {body: "Session Completed."});
-            
             const activeMode = document.getElementById('mode-display').textContent;
             if (!activeMode.includes("Break")) {
                 const day = new Date().toISOString().split('T')[0];
-                db.stats[day] = (db.stats[day] || 0) + 1;
-                save();
+                localData.stats[day] = (localData.stats[day] || 0) + 1;
+                userRef.set(localData);
             }
-            alert("Great work! Time is up.");
+            document.getElementById('beep').play();
+            alert("Session complete!");
             resetTimer();
         }
 
         function setMode(mins, label, btn) {
-            isRunning = false;
-            clearInterval(timerId);
+            isRunning = false; clearInterval(timerId);
             timeLeft = mins * 60;
             document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+            if(btn) btn.classList.add('active');
             document.getElementById('mode-display').textContent = label;
+            document.getElementById('timer').textContent = `${mins.toString().padStart(2,'0')}:00`;
             document.getElementById('start-btn').textContent = "START";
-            document.getElementById('start-btn').style.background = "var(--primary)";
-            render();
-            changeQuote();
         }
 
-        function resetTimer() {
-            document.querySelector('.mode-btn.active').click();
+        function setCustomTime() {
+            const val = document.getElementById('custom-min').value;
+            if(val > 0 && val <= 180) {
+                setMode(parseInt(val), 'Custom Focus Session', null);
+                document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+            } else {
+                alert("Please enter a value between 1-180.");
+            }
         }
 
-        function changeQuote() {
-            const q = quotes[Math.floor(Math.random() * quotes.length)];
-            document.getElementById('quote-text').textContent = `"${q}"`;
-        }
-
-        function save() {
-            localStorage.setItem('ege_lgs_v10', JSON.stringify(db));
-            updateUI();
-        }
+        function resetTimer() { document.querySelector('.mode-btn.active')?.click() || setMode(25, 'Focus Session', null); }
 
         function updateUI() {
-            // Tasks
             const list = document.getElementById('task-list');
             list.innerHTML = '';
-            db.tasks.forEach((t, i) => {
-                const div = document.createElement('div');
-                div.className = 'todo-item';
-                div.innerHTML = `<input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${i})"> 
-                                <span style="${t.done?'text-decoration:line-through;opacity:0.4':''}">${t.txt}</span>`;
+            (localData.tasks || []).forEach((t, i) => {
+                const div = document.createElement('div'); div.className = 'todo-item';
+                div.innerHTML = `<input type="checkbox" ${t.done?'checked':''} onchange="toggleTask(${i})"> <span style="${t.done?'text-decoration:line-through;opacity:0.5':''}">${t.txt}</span>`;
                 list.appendChild(div);
             });
+            updateChart();
+        }
 
-            // Chart
+        function updateChart() {
             const ctx = document.getElementById('chart').getContext('2d');
             const labels = []; const data = []; let total = 0;
             for(let i=6; i>=0; i--) {
                 const d = new Date(); d.setDate(d.getDate()-i);
                 const k = d.toISOString().split('T')[0];
                 labels.push(d.toLocaleDateString('en-US', {weekday: 'short'}));
-                const v = db.stats[k] || 0;
+                const v = (localData.stats && localData.stats[k]) ? localData.stats[k] : 0;
                 data.push(v); total += v;
             }
             document.getElementById('week-total').textContent = total;
-
             if(myChart) myChart.destroy();
             myChart = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        data: data,
-                        backgroundColor: '#f39c12',
-                        borderRadius: 8,
-                        hoverBackgroundColor: '#e67e22'
-                    }]
-                },
-                options: {
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    scales: { 
-                        y: { display: false, beginAtZero: true },
-                        x: { grid: { display: false }, ticks: { color: '#999', font: {size: 11} } }
-                    }
-                }
+                type: 'bar', data: { labels, datasets: [{ data, backgroundColor: '#f39c12', borderRadius: 8 }] },
+                options: { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false } } } }
             });
         }
 
         function addTask() {
             const inp = document.getElementById('task-in');
             if(!inp.value.trim()) return;
-            db.tasks.push({ txt: inp.value, done: false });
-            save();
+            if(!localData.tasks) localData.tasks = [];
+            localData.tasks.push({ txt: inp.value, done: false });
+            userRef.set(localData);
             inp.value = '';
         }
 
         function toggleTask(i) {
-            db.tasks[i].done = !db.tasks[i].done;
-            save();
+            localData.tasks[i].done = !localData.tasks[i].done;
+            userRef.set(localData);
         }
-
-        updateUI();
-        render();
     </script>
 </body>
 </html>
