@@ -1,290 +1,243 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ege Kayaalp </title>
+    <title>EGE KAYAALP | LGS MASTER V37</title>
     
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#3498db">
-    <link rel="manifest" id="pwa-manifest">
+    <meta name="theme-color" content="#f39c12">
 
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&family=Montserrat:wght@900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.15.0/firebase-database-compat.js"></script>
+
     <style>
         :root { --numeric: #3498db; --verbal: #f39c12; --focus: #9b59b6; --mola: #2ecc71; --bg: #f4f7f6; --card: #ffffff; --text: #2d3436; }
-        body { font-family: 'Poppins', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: env(safe-area-inset-top) 15px 15px 15px; display: flex; justify-content: center; }
-        .app-container { width: 100%; max-width: 450px; display: flex; flex-direction: column; gap: 12px; }
-        .card { background: var(--card); border-radius: 20px; padding: 18px; box-shadow: 0 8px 25px rgba(0,0,0,0.04); position: relative; }
         
-        /* Language Toggle */
-        .lang-toggle { position: absolute; top: 15px; right: 15px; background: #eee; border: none; padding: 5px 10px; border-radius: 8px; font-size: 0.7rem; font-weight: 800; cursor: pointer; transition: 0.3s; }
+        body { font-family: 'Poppins', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px 15px 130px 15px; display: flex; justify-content: center; }
+        .app-container { width: 100%; max-width: 450px; display: flex; flex-direction: column; gap: 15px; }
+        .card { background: var(--card); border-radius: 22px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); position: relative; }
         
-        .user-name { font-family: 'Montserrat'; font-size: 1.5rem; text-align: center; margin: 0; text-transform: uppercase; color: #3498db; }
-        .quote { font-size: 0.75rem; font-style: italic; color: #636e72; text-align: center; margin-top: 5px; min-height: 1.2rem; }
-        
-        .timer-display { font-size: 5.5rem; font-weight: 800; text-align: center; margin: 5px 0; font-variant-numeric: tabular-nums; }
-        
-        .mode-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 12px; }
-        .mode-btn { background: #f1f2f6; border: none; padding: 12px 2px; border-radius: 12px; cursor: pointer; font-size: 0.65rem; font-weight: 800; color: #a4b0be; text-transform: uppercase; transition: all 0.3s; opacity: 0.6; }
-        
-        .mode-btn.active.num { background: var(--numeric); color: white; opacity: 1; box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3); }
-        .mode-btn.active.ver { background: var(--verbal); color: white; opacity: 1; box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3); }
-        .mode-btn.active.foc { background: var(--focus); color: white; opacity: 1; box-shadow: 0 4px 12px rgba(155, 89, 182, 0.3); }
-        .mode-btn.active.brk { background: var(--mola); color: white; opacity: 1; box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3); }
-        
-        .mode-indicator { text-align: center; font-size: 0.75rem; font-weight: 800; letter-spacing: 1px; padding-bottom: 5px; border-bottom: 3px solid var(--numeric); display: inline-block; transition: 0.3s; text-transform: uppercase; }
-        .indicator-wrap { text-align: center; margin-bottom: 10px; }
+        /* Header */
+        .top-btns { position: absolute; top: 15px; right: 15px; display: flex; gap: 8px; z-index: 100; }
+        .icon-btn { background: #eee; border: none; padding: 8px 12px; border-radius: 10px; font-size: 0.7rem; font-weight: 800; cursor: pointer; }
+        .icon-btn.active { background: #2ecc71; color: white; }
+        .user-name { font-family: 'Montserrat'; font-size: 1.8rem; text-align: center; margin: 0; color: #f39c12 !important; text-transform: uppercase; }
+        .quote { font-size: 0.7rem; color: #95a5a6; text-align: center; margin-top: 5px; font-style: italic; }
 
-        .main-btn { width: 100%; padding: 16px; border-radius: 15px; border: none; font-size: 1.1rem; font-weight: 800; cursor: pointer; color: white; transition: 0.3s; text-transform: uppercase; }
-        
-        .dash-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-        .dash-item { background: #f8f9fa; padding: 12px 2px; border-radius: 15px; text-align: center; border: 1px solid rgba(0,0,0,0.02); }
-        .dash-val { display: block; font-weight: 800; font-size: 0.9rem; margin-top: 2px; }
-        .dash-label { font-size: 0.55rem; color: #999; font-weight: 700; text-transform: uppercase; display: block; }
+        /* Timer */
+        .timer-display { font-size: 5.5rem; font-weight: 800; text-align: center; margin: 10px 0; font-variant-numeric: tabular-nums; letter-spacing: -2px; }
+        .mode-indicator { background: #f1f2f6; padding: 5px 15px; border-radius: 20px; font-size: 0.7rem; font-weight: 800; display: inline-block; margin-bottom: 10px; border: 2px solid var(--numeric); text-transform: uppercase; }
 
-        /* Calendar Styles */
-        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; margin-top: 10px; }
-        .cal-day { font-size: 0.6rem; text-align: center; padding: 6px 0; background: #f9f9f9; border-radius: 6px; color: #dfe6e9; font-weight: 700; }
-        .cal-day.work { background: #e3f2fd; color: var(--numeric); border: 1px solid #bbdefb; }
+        /* Fixed Action Bar */
+        .action-bar {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: rgba(255,255,255,0.9); backdrop-filter: blur(10px);
+            padding: 20px; box-shadow: 0 -10px 30px rgba(0,0,0,0.08);
+            display: flex; justify-content: center; align-items: center; gap: 15px;
+            z-index: 9999; border-top-left-radius: 30px; border-top-right-radius: 30px;
+        }
 
-        #q-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px; }
-        .modal-content { background: white; padding: 25px; border-radius: 20px; width: 100%; max-width: 300px; text-align: center; }
-        .q-input { width: 100%; padding: 12px; margin: 15px 0; border-radius: 10px; border: 2px solid #eee; text-align: center; font-size: 1.2rem; font-weight: bold; }
+        .main-btn { 
+            flex: 4; height: 70px; background: #f39c12; color: white; border: none; border-radius: 20px; 
+            font-size: 1.4rem; font-weight: 900; text-transform: uppercase; cursor: pointer;
+            box-shadow: 0 8px 25px rgba(243, 156, 18, 0.3); display: flex !important; align-items: center; justify-content: center;
+        }
+        .reset-btn {
+            flex: 1; height: 70px; background: #eee; color: #7f8c8d; border: none; border-radius: 20px;
+            font-size: 1.5rem; cursor: pointer; display: flex !important; align-items: center; justify-content: center;
+        }
+
+        /* Mode & Custom */
+        .mode-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 10px 0; }
+        .mode-btn { background: #eee; border: none; padding: 12px 5px; border-radius: 12px; font-size: 0.65rem; font-weight: 800; color: #7f8c8d; cursor: pointer; text-transform: uppercase; }
+        .mode-btn.active.num { background: var(--numeric); color: white; }
+        .mode-btn.active.ver { background: var(--verbal); color: white; }
+        .mode-btn.active.foc { background: var(--focus); color: white; }
+        .mode-btn.active.brk { background: var(--mola); color: white; }
         
-        .todo-item { display: flex; align-items: center; gap: 10px; background: #f8f9fa; padding: 10px; border-radius: 12px; margin-bottom: 6px; font-size: 0.85rem; }
+        .custom-area { display: flex; gap: 10px; margin-top: 10px; padding-top: 10px; border-top: 1px dashed #eee; }
+        .custom-input { width: 70px; border-radius: 12px; border: 1.5px solid #eee; padding: 10px; text-align: center; font-weight: 800; outline: none; }
+        .custom-set-btn { flex: 1; background: #2d3436; color: white; border: none; border-radius: 12px; font-weight: 800; font-size: 0.75rem; cursor: pointer; }
+
+        /* Stats */
+        .dash-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .dash-item { background: #f8f9fa; padding: 12px 5px; border-radius: 15px; text-align: center; border: 1px solid rgba(0,0,0,0.02); }
+        .dash-label { font-size: 0.55rem; color: #95a5a6; display: block; font-weight: 700; text-transform: uppercase; }
+        .dash-val { font-size: 0.9rem; font-weight: 800; display: block; }
+
+        /* Q-Modal */
+        #q-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; z-index: 10000; padding: 20px; backdrop-filter: blur(10px); }
+        .modal-content { background: white; padding: 30px; border-radius: 30px; width: 100%; max-width: 320px; text-align: center; }
+        .q-input { width: 100%; padding: 15px; margin: 20px 0; border-radius: 15px; border: 2px solid #eee; font-size: 2.5rem; text-align: center; outline: none; font-weight: 800; }
+
+        .todo-item { display: flex; align-items: center; gap: 10px; background: #f8f9fa; padding: 12px; border-radius: 15px; margin-bottom: 8px; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-top: 10px; }
+        .cal-day { font-size: 0.6rem; text-align: center; padding: 8px 0; background: #f9f9f9; border-radius: 8px; color: #bdc3c7; font-weight: 700; }
+        .cal-day.work { background: #e3f2fd; color: #3498db; }
+        .cal-day.today { border: 2px solid #f39c12; color: #f39c12; font-weight: 900; }
     </style>
 </head>
 <body>
 
     <div id="q-modal">
         <div class="modal-content">
-            <h3 style="margin:0" id="modal-title">Oturum Tamam!</h3>
-            <p id="q-modal-desc" style="font-size:0.8rem; color:#666">Kaç soru çözdün?</p>
-            <input type="number" id="q-count" class="q-input" placeholder="0" autofocus>
-            <button onclick="submitQuestions()" class="main-btn" id="modal-submit-btn">KAYDET</button>
+            <h2 id="modal-title" style="margin:0">Oturum Bitti!</h2>
+            <p style="color:#666">Kaç soru çözdün?</p>
+            <input type="number" id="q-count" class="q-input" placeholder="0" inputmode="numeric">
+            <button onclick="submitQuestions()" class="main-btn" style="height:60px; width:100%">KAYDET</button>
         </div>
     </div>
 
     <div class="app-container">
         <div class="card">
-            <button class="lang-toggle" id="lang-btn" onclick="toggleLang()">TR</button>
-            <h1 class="user-name">EGE <span style="color:#2d3436">KAYAALP</span></h1>
-            <div id="quote-text" class="quote">"Analyze your past, build your future."</div>
+            <div class="top-btns">
+                <button class="icon-btn" id="cloud-btn" onclick="toggleSyncPanel()">☁️</button>
+                <button class="icon-btn" onclick="toggleLang()">EN</button>
+            </div>
+            <h1 class="user-name">EGE KAYAALP</h1>
+            <p id="quote-text" class="quote">"Gelecek, bugünden hazırlananlara aittir."</p>
+            
+            <div id="sync-panel" style="display:none; margin-top:15px; border-top:1px solid #eee; padding-top:15px;">
+                <input type="password" id="sync-key" style="width:100%; padding:12px; border-radius:10px; border:1px solid #ddd; margin-bottom:10px; box-sizing:border-box" placeholder="Sync ID...">
+                <button onclick="connectCloud()" class="icon-btn" style="width:100%; background:var(--numeric); color:white; padding:12px;">BULUTA BAĞLAN</button>
+            </div>
         </div>
 
-        <div class="card">
+        <div class="card" style="text-align:center">
+            <div id="mode-display" class="mode-indicator">SAYISAL OTURUMU</div>
             <div class="timer-display" id="timer">80:00</div>
-            <div class="indicator-wrap">
-                <div id="mode-display" class="mode-indicator">NUMERIC SESSION</div>
-            </div>
-        </div>
-
-        <div class="card">
+            
             <div class="mode-grid">
-                <button class="mode-btn active num" id="m-num" onclick="setMode(80, 'NUMERIC', this, 'NUM')">Numeric</button>
-                <button class="mode-btn ver" id="m-ver" onclick="setMode(75, 'VERBAL', this, 'VER')">Verbal</button>
-                <button class="mode-btn foc" id="m-foc" onclick="setMode(25, 'FOCUS', this, 'FOC')">Focus</button>
-                <button class="mode-btn brk" id="m-brk" onclick="setMode(5, 'BREAK', this, 'BRK')">Break</button>
-            </div>
-            <div style="display:flex; gap:10px; margin-bottom:12px">
-                <input type="number" id="custom-min" style="width:65px; border-radius:10px; border:1px solid #eee; padding:5px; text-align:center" placeholder="Min">
-                <button onclick="setCustom()" id="btn-custom" style="background:#2d3436; color:white; border:none; border-radius:10px; font-size:0.7rem; font-weight:700; flex:1">SET CUSTOM</button>
-            </div>
-            <button class="main-btn" id="start-btn" style="background:var(--numeric);" onclick="toggleTimer()">START SESSION</button>
-        </div>
-
-        <div class="card dash-grid">
-            <div class="dash-item" style="border-left: 4px solid var(--numeric)">
-                <span class="dash-label" id="lbl-num-t">🔢 Num Time</span><span class="dash-val" id="total-num">0m</span>
-            </div>
-            <div class="dash-item">
-                <span class="dash-label" id="lbl-num-q">📝 Num Q</span><span class="dash-val" id="q-num">0</span>
-            </div>
-            <div class="dash-item">
-                <span class="dash-label" id="lbl-num-s">⚡ Num Speed</span><span class="dash-val" id="speed-num">0s</span>
+                <button class="mode-btn active num" onclick="setMode(80, 'NUM', this)">Sayısal</button>
+                <button class="mode-btn ver" onclick="setMode(75, 'VER', this)">Sözel</button>
+                <button class="mode-btn foc" onclick="setMode(25, 'FOC', this)">Odak</button>
+                <button class="mode-btn brk" onclick="setMode(5, 'BRK', this)">Mola</button>
             </div>
 
-            <div class="dash-item" style="border-left: 4px solid var(--verbal)">
-                <span class="dash-label" id="lbl-ver-t">🔡 Ver Time</span><span class="dash-val" id="total-ver">0m</span>
+            <div class="custom-area">
+                <input type="number" id="custom-min" class="custom-input" placeholder="Dk">
+                <button onclick="setCustom()" class="custom-set-btn" id="btn-custom">SÜREYİ AYARLA</button>
             </div>
-            <div class="dash-item">
-                <span class="dash-label" id="lbl-ver-q">📝 Ver Q</span><span class="dash-val" id="q-ver">0</span>
-            </div>
-            <div class="dash-item">
-                <span class="dash-label" id="lbl-ver-s">⚡ Ver Speed</span><span class="dash-val" id="speed-ver">0s</span>
-            </div>
-
-            <div class="dash-item"><span class="dash-label" id="lbl-foc">🧠 Focus</span><span class="dash-val" id="total-foc">0m</span></div>
-            <div class="dash-item"><span class="dash-label" id="lbl-brk">☕ Break</span><span class="dash-val" id="total-brk">0m</span></div>
-            <div class="dash-item"><span class="dash-label" id="lbl-str">🔥 Streak</span><span class="dash-val" id="streak">0</span></div>
         </div>
 
         <div class="card">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                <span style="font-weight:800; font-size:0.8rem;" id="lbl-weekly">Weekly Progress</span>
-                <span id="date-range" style="font-size:0.65rem; color:#999; font-weight:600;"></span>
+            <div style="font-size:0.75rem; font-weight:800; margin-bottom:12px; color:#3498db" id="lbl-dash">BUGÜNKÜ PERFORMANSIN</div>
+            <div class="dash-grid">
+                <div class="dash-item"><span class="dash-label">Sayısal</span><span class="dash-val" id="today-num">0d</span></div>
+                <div class="dash-item"><span class="dash-label">Soru</span><span class="dash-val" id="today-q-num">0</span></div>
+                <div class="dash-item"><span class="dash-label">Hız</span><span class="dash-val" id="today-speed-num">0s</span></div>
+                <div class="dash-item"><span class="dash-label">Sözel</span><span class="dash-val" id="today-ver">0d</span></div>
+                <div class="dash-item"><span class="dash-label">Soru</span><span class="dash-val" id="today-q-ver">0</span></div>
+                <div class="dash-item"><span class="dash-label">Hız</span><span class="dash-val" id="today-speed-ver">0s</span></div>
+                <div class="dash-item"><span class="dash-label">Odak</span><span class="dash-val" id="today-foc">0d</span></div>
+                <div class="dash-item"><span class="dash-label">Seri</span><span class="dash-val" id="streak">0</span></div>
+                <div class="dash-item"><span class="dash-label">Mola</span><span class="dash-val" id="today-brk">0d</span></div>
             </div>
-            <div style="height:160px;"><canvas id="chart"></canvas></div>
         </div>
 
         <div class="card">
-            <div style="font-size:0.7rem; font-weight:800; margin-bottom:10px; color:#2d3436" id="lbl-cal">STUDY CALENDAR</div>
+            <div style="font-size:0.7rem; font-weight:800; margin-bottom:10px">HAFTALIK GELİŞİM</div>
+            <div style="height:150px;"><canvas id="chart"></canvas></div>
+        </div>
+
+        <div class="card">
+            <div style="font-size:0.7rem; font-weight:800; margin-bottom:10px">ÇALIŞMA TAKVİMİ</div>
             <div class="calendar-grid" id="calendar-body"></div>
         </div>
 
         <div class="card">
-            <div style="display:flex; gap:8px; margin-bottom:10px;">
-                <input type="text" id="task-in" style="flex:1; border:none; background:#f8f9fa; padding:10px; border-radius:10px; outline:none" placeholder="Daily target...">
-                <button onclick="addTask()" style="background:var(--numeric); border:none; color:white; width:40px; border-radius:10px; font-weight:bold">+</button>
+            <div style="display:flex; gap:10px; margin-bottom:10px;">
+                <input type="text" id="task-in" style="flex:1; border:none; background:#f1f2f6; padding:12px; border-radius:12px; outline:none" placeholder="Hedef ekle...">
+                <button onclick="addTask()" style="background:#3498db; color:white; border:none; width:45px; border-radius:12px; font-weight:bold; cursor:pointer">+</button>
             </div>
             <div id="task-list"></div>
         </div>
     </div>
 
+    <div class="action-bar">
+        <button class="reset-btn" onclick="resetTimer()" title="Sıfırla">🔄</button>
+        <button class="main-btn" id="start-btn" onclick="toggleTimer()">BAŞLAT</button>
+    </div>
+
     <script>
-        // PWA Config
-        const manifest = { "name": "Ege LGS Master", "short_name": "LGSMaster", "start_url": ".", "display": "standalone", "background_color": "#f4f7f6", "theme_color": "#3498db", "icons": [{"src": "https://cdn-icons-png.flaticon.com/512/3406/3406831.png", "sizes": "512x512", "type": "image/png"}]};
-        document.querySelector('#pwa-manifest').setAttribute('href', 'data:application/json;base64,' + btoa(JSON.stringify(manifest)));
-        if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('data:text/javascript;base64,' + btoa('self.addEventListener("fetch", (e) => {});')); }); }
+        let db = JSON.parse(localStorage.getItem('ege_v37_db')) || { num: {}, ver: {}, foc: {}, brk: {}, q_num: {}, q_ver: {}, tasks: [], streak: 0, lastDate: "" };
+        let currentLang = 'TR', timeLeft = 80 * 60, isRunning = false, timerId = null, endTime = null, curMins = 80, selectedCat = 'NUM', myChart = null;
+        let cloudRef = null;
 
-        let currentLang = localStorage.getItem('ege_lang') || 'EN';
-        const langData = {
-            'EN': {
-                quote: '"Analyze your past, build your future."',
-                num: 'Numeric', ver: 'Verbal', foc: 'Focus', brk: 'Break',
-                custom: 'SET CUSTOM', start: 'START SESSION', stop: 'STOP SESSION', resume: 'RESUME',
-                lbl_num_t: '🔢 Num Time', lbl_num_q: '📝 Num Q', lbl_num_s: '⚡ Num Speed',
-                lbl_ver_t: '🔡 Ver Time', lbl_ver_q: '📝 Ver Q', lbl_ver_s: '⚡ Ver Speed',
-                lbl_foc: '🧠 Focus', lbl_brk: '☕ Break', lbl_str: '🔥 Streak',
-                weekly: 'Weekly Progress', cal: 'STUDY CALENDAR', modal_t: 'Session Complete!',
-                modal_d: 'How many questions did you solve?', save: 'SAVE DATA', placeholder: 'Daily target...'
-            },
-            'TR': {
-                quote: '"Geçmişini analiz et, geleceğini inşa et."',
-                num: 'Sayısal', ver: 'Sözel', foc: 'Odak', brk: 'Mola',
-                custom: 'SÜRE AYARLA', start: 'OTURUMU BAŞLAT', stop: 'OTURUMU DURDUR', resume: 'DEVAM ET',
-                lbl_num_t: '🔢 Sayısal Süre', lbl_num_q: '📝 Sayısal Soru', lbl_num_s: '⚡ Sayısal Hız',
-                lbl_ver_t: '🔡 Sözel Süre', lbl_ver_q: '📝 Sözel Soru', lbl_ver_s: '⚡ Sözel Hız',
-                lbl_foc: '🧠 Odak', lbl_brk: '☕ Mola', lbl_str: '🔥 Seri',
-                weekly: 'Haftalık Gelişim', cal: 'ÇALIŞMA TAKVİMİ', modal_t: 'Oturum Tamam!',
-                modal_d: 'Kaç soru çözdün?', save: 'KAYDET', placeholder: 'Günlük hedef...'
-            }
-        };
+        function getToday() { return new Date().toLocaleDateString('sv-SE'); }
 
-        let db = JSON.parse(localStorage.getItem('ege_v25_db')) || { 
-            num: {}, ver: {}, foc: {}, brk: {}, q_num: {}, q_ver: {}, 
-            tasks: [], streak: 0, lastActiveDate: null 
-        };
-        
-        let timeLeft = 80 * 60, isRunning = false, timerId = null, endTime = null, myChart = null;
-        let curMins = 80, selectedCat = 'NUM', audioCtx = null;
-
-        function toggleLang() {
-            currentLang = currentLang === 'EN' ? 'TR' : 'EN';
-            localStorage.setItem('ege_lang', currentLang);
-            updateLangUI();
-        }
-
-        function updateLangUI() {
-            const l = langData[currentLang];
-            document.getElementById('lang-btn').textContent = currentLang === 'EN' ? 'TR' : 'EN';
-            document.getElementById('quote-text').textContent = l.quote;
-            document.getElementById('m-num').textContent = l.num;
-            document.getElementById('m-ver').textContent = l.ver;
-            document.getElementById('m-foc').textContent = l.foc;
-            document.getElementById('m-brk').textContent = l.brk;
-            document.getElementById('btn-custom').textContent = l.custom;
-            document.getElementById('lbl-num-t').textContent = l.lbl_num_t;
-            document.getElementById('lbl-num-q').textContent = l.lbl_num_q;
-            document.getElementById('lbl-num-s').textContent = l.lbl_num_s;
-            document.getElementById('lbl-ver-t').textContent = l.lbl_ver_t;
-            document.getElementById('lbl-ver-q').textContent = l.lbl_ver_q;
-            document.getElementById('lbl-ver-s').textContent = l.lbl_ver_s;
-            document.getElementById('lbl-foc').textContent = l.lbl_foc;
-            document.getElementById('lbl-brk').textContent = l.lbl_brk;
-            document.getElementById('lbl-str').textContent = l.lbl_str;
-            document.getElementById('lbl-weekly').textContent = l.weekly;
-            document.getElementById('lbl-cal').textContent = l.cal;
-            document.getElementById('modal-title').textContent = l.modal_t;
-            document.getElementById('q-modal-desc').textContent = l.modal_d;
-            document.getElementById('modal-submit-btn').textContent = l.save;
-            document.getElementById('task-in').placeholder = l.placeholder;
-            
-            const activeLabel = document.querySelector('.mode-btn.active').textContent.toUpperCase();
-            document.getElementById('mode-display').textContent = activeLabel + " SESSION";
-            if (!isRunning) document.getElementById('start-btn').textContent = l.start;
-        }
-
-        function playBeep() {
-            if (!audioCtx) audioCtx = new AudioContext();
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain); gain.connect(audioCtx.destination);
-            osc.frequency.setValueAtTime(880, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1);
-            osc.start(); osc.stop(audioCtx.currentTime + 1);
+        function playChime() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const play = (f, s, d) => {
+                    const o = ctx.createOscillator(); const g = ctx.createGain();
+                    o.type = 'triangle'; o.frequency.setValueAtTime(f, s);
+                    g.gain.setValueAtTime(0, s); g.gain.linearRampToValueAtTime(0.3, s + 0.1);
+                    g.gain.exponentialRampToValueAtTime(0.01, s + d);
+                    o.connect(g); g.connect(ctx.destination);
+                    o.start(s); o.stop(s + d);
+                };
+                play(554.37, ctx.currentTime, 0.8); play(440.00, ctx.currentTime + 0.5, 0.8);
+            } catch(e) {}
         }
 
         function toggleTimer() {
-            if (!audioCtx) audioCtx = new AudioContext();
             const btn = document.getElementById('start-btn');
-            const l = langData[currentLang];
             if (isRunning) {
                 isRunning = false; clearInterval(timerId);
                 timeLeft = Math.max(0, Math.round((endTime - Date.now()) / 1000));
-                btn.textContent = l.resume;
+                btn.textContent = "DEVAM ET";
             } else {
                 isRunning = true; endTime = Date.now() + (timeLeft * 1000);
                 timerId = setInterval(() => {
                     timeLeft = Math.max(0, Math.round((endTime - Date.now()) / 1000));
                     document.getElementById('timer').textContent = `${Math.floor(timeLeft/60).toString().padStart(2,'0')}:${(timeLeft%60).toString().padStart(2,'0')}`;
-                    if (timeLeft <= 0) { clearInterval(timerId); complete(); }
-                }, 100);
-                btn.textContent = l.stop;
+                    if (timeLeft <= 0) { clearInterval(timerId); isRunning = false; finish(); }
+                }, 250);
+                btn.textContent = "DURAKLAT";
             }
         }
 
-        function complete() {
-            const day = new Date().toISOString().split('T')[0];
-            if (selectedCat === 'NUM') db.num[day] = (db.num[day] || 0) + curMins;
-            else if (selectedCat === 'VER') db.ver[day] = (db.ver[day] || 0) + curMins;
-            else if (selectedCat === 'FOC') db.foc[day] = (db.foc[day] || 0) + curMins;
-            else if (selectedCat === 'BRK') db.brk[day] = (db.brk[day] || 0) + curMins;
-            
-            if (selectedCat !== 'BRK' && db.lastActiveDate !== day) {
-                db.streak++;
-                db.lastActiveDate = day;
-            }
-            save(); playBeep();
+        function finish() {
+            const day = getToday();
+            db[selectedCat.toLowerCase()][day] = (db[selectedCat.toLowerCase()][day] || 0) + curMins;
+            if(selectedCat !== 'BRK' && db.lastDate !== day) { db.streak++; db.lastDate = day; }
+            save(); playChime();
             if(selectedCat === 'NUM' || selectedCat === 'VER') {
-                document.getElementById('modal-submit-btn').style.background = selectedCat === 'NUM' ? 'var(--numeric)' : 'var(--verbal)';
                 document.getElementById('q-modal').style.display = 'flex';
-            } else { reset(); }
+                document.getElementById('q-count').focus();
+            } else { resetTimer(); }
         }
 
         function submitQuestions() {
-            const day = new Date().toISOString().split('T')[0];
-            const count = parseInt(document.getElementById('q-count').value) || 0;
-            if (selectedCat === 'NUM') db.q_num[day] = (db.q_num[day] || 0) + count;
-            if (selectedCat === 'VER') db.q_ver[day] = (db.q_ver[day] || 0) + count;
+            const day = getToday();
+            const val = parseInt(document.getElementById('q-count').value) || 0;
+            db['q_' + selectedCat.toLowerCase()][day] = (db['q_' + selectedCat.toLowerCase()][day] || 0) + val;
             document.getElementById('q-modal').style.display = 'none';
             document.getElementById('q-count').value = '';
-            save(); reset();
+            save(); resetTimer();
         }
 
-        function setMode(mins, label, btn, cat) {
+        function setMode(mins, cat, btn) {
             isRunning = false; clearInterval(timerId);
             timeLeft = mins * 60; curMins = mins; selectedCat = cat;
             document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active', 'num', 'ver', 'foc', 'brk'));
             btn.classList.add('active', cat.toLowerCase());
-            const colors = { 'NUM': 'var(--numeric)', 'VER': 'var(--verbal)', 'FOC': 'var(--focus)', 'BRK': 'var(--mola)' };
-            document.getElementById('start-btn').style.background = colors[cat];
-            document.getElementById('mode-display').style.borderColor = colors[cat];
-            document.getElementById('mode-display').textContent = langData[currentLang][cat.toLowerCase()].toUpperCase() + " SESSION";
+            
+            const color = getComputedStyle(document.documentElement).getPropertyValue('--' + cat.toLowerCase()).trim();
+            const sBtn = document.getElementById('start-btn');
+            sBtn.style.background = color;
+            sBtn.style.boxShadow = `0 8px 25px ${color}55`;
+            sBtn.textContent = "BAŞLAT";
+            
+            const mDisp = document.getElementById('mode-display');
+            mDisp.style.borderColor = color;
+            mDisp.textContent = cat === 'NUM' ? "SAYISAL OTURUMU" : cat === 'VER' ? "SÖZEL OTURUMU" : cat === 'FOC' ? "ODAKLANMA" : "MOLA";
             document.getElementById('timer').textContent = `${mins.toString().padStart(2,'0')}:00`;
-            document.getElementById('start-btn').textContent = langData[currentLang].start;
         }
 
         function setCustom() {
@@ -292,30 +245,38 @@
             if(val > 0) {
                 timeLeft = val * 60; curMins = val;
                 document.getElementById('timer').textContent = `${val.toString().padStart(2,'0')}:00`;
+                document.getElementById('start-btn').textContent = "BAŞLAT";
+                isRunning = false; clearInterval(timerId);
             }
         }
 
-        function reset() { 
-            const activeBtn = document.querySelector('.mode-btn.active');
-            setMode(curMins, activeBtn.textContent, activeBtn, selectedCat); 
+        function resetTimer() {
+            isRunning = false; clearInterval(timerId);
+            timeLeft = curMins * 60;
+            document.getElementById('timer').textContent = `${curMins.toString().padStart(2,'0')}:00`;
+            document.getElementById('start-btn').textContent = "BAŞLAT";
         }
 
-        function save() { localStorage.setItem('ege_v25_db', JSON.stringify(db)); update(); }
+        function save() {
+            localStorage.setItem('ege_v37_db', JSON.stringify(db));
+            if(cloudRef) cloudRef.set(db);
+            updateUI();
+        }
 
-        function update() {
-            const sum = (obj) => Object.values(obj || {}).reduce((a,b)=>a+b,0);
-            const tN = sum(db.num), tV = sum(db.ver), tF = sum(db.foc), tB = sum(db.brk);
-            const qN = sum(db.q_num || {}), qV = sum(db.q_ver || {});
+        function updateUI() {
+            const day = getToday();
+            const tN = db.num[day] || 0, tV = db.ver[day] || 0;
+            const qN = db.q_num[day] || 0, qV = db.q_ver[day] || 0;
             
-            document.getElementById('total-num').textContent = tN + "m";
-            document.getElementById('total-ver').textContent = tV + "m";
-            document.getElementById('total-foc').textContent = tF + "m";
-            document.getElementById('total-brk').textContent = tB + "m";
-            document.getElementById('q-num').textContent = qN;
-            document.getElementById('q-ver').textContent = qV;
-            document.getElementById('streak').textContent = db.streak || 0;
-            document.getElementById('speed-num').textContent = qN > 0 ? ((tN * 60) / qN).toFixed(1) + "s" : "0s";
-            document.getElementById('speed-ver').textContent = qV > 0 ? ((tV * 60) / qV).toFixed(1) + "s" : "0s";
+            document.getElementById('today-num').textContent = tN + "d";
+            document.getElementById('today-ver').textContent = tV + "d";
+            document.getElementById('today-foc').textContent = (db.foc[day] || 0) + "d";
+            document.getElementById('today-brk').textContent = (db.brk[day] || 0) + "d";
+            document.getElementById('today-q-num').textContent = qN;
+            document.getElementById('today-q-ver').textContent = qV;
+            document.getElementById('streak').textContent = db.streak;
+            document.getElementById('today-speed-num').textContent = qN > 0 ? ((tN * 60) / qN).toFixed(0) + "s" : "0s";
+            document.getElementById('today-speed-ver').textContent = qV > 0 ? ((tV * 60) / qV).toFixed(0) + "s" : "0s";
 
             const list = document.getElementById('task-list'); list.innerHTML = '';
             (db.tasks || []).forEach((t, i) => {
@@ -323,51 +284,49 @@
                 d.innerHTML = `<input type="checkbox" ${t.done?'checked':''} onchange="db.tasks[${i}].done=!db.tasks[${i}].done;save()"> <span style="${t.done?'text-decoration:line-through;opacity:0.5':''}">${t.txt}</span>`;
                 list.appendChild(d);
             });
-            drawChart();
-            renderCalendar();
-        }
-
-        function renderCalendar() {
-            const body = document.getElementById('calendar-body'); body.innerHTML = '';
-            const now = new Date();
-            const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
-            for(let i=1; i<=daysInMonth; i++) {
-                const key = `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2,'0')}-${i.toString().padStart(2,'0')}`;
-                const active = (db.num && db.num[key]) || (db.ver && db.ver[key]);
-                const el = document.createElement('div');
-                el.className = `cal-day ${active ? 'work' : ''}`; el.textContent = i;
-                body.appendChild(el);
-            }
+            drawChart(); renderCalendar();
         }
 
         function drawChart() {
             const ctx = document.getElementById('chart').getContext('2d');
-            const labels = [], nD = [], vD = [], fD = [], bD = [];
+            const labels = [], nD = [], vD = [];
             for(let i=6; i>=0; i--) {
-                const d = new Date(); d.setDate(d.getDate()-i);
-                const k = d.toISOString().split('T')[0];
-                labels.push(`${d.getDate()} ${d.toLocaleDateString(currentLang === 'EN' ? 'en-US' : 'tr-TR',{month:'short'})}`);
-                nD.push(db.num[k]||0); vD.push(db.ver[k]||0); fD.push(db.foc[k]||0); bD.push(db.brk[k]||0);
+                const d = new Date(); d.setDate(d.getDate()-i); const k = d.toLocaleDateString('sv-SE');
+                labels.push(d.toLocaleDateString('tr-TR', {weekday:'short'}));
+                nD.push(db.num[k]||0); vD.push(db.ver[k]||0);
             }
             if(myChart) myChart.destroy();
             myChart = new Chart(ctx, {
-                type: 'bar', data: { labels, datasets: [
-                    { label: 'Numeric', data: nD, backgroundColor: '#3498db', borderRadius: 4 },
-                    { label: 'Verbal', data: vD, backgroundColor: '#f39c12', borderRadius: 4 },
-                    { label: 'Focus', data: fD, backgroundColor: '#9b59b6', borderRadius: 4 },
-                    { label: 'Break', data: bD, backgroundColor: '#2ecc71', borderRadius: 4 }
-                ]},
-                options: { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false }, ticks: { font: { size: 8 } } } } }
+                type: 'bar', data: { labels, datasets: [{ label: 'N', data: nD, backgroundColor: '#3498db', borderRadius: 5 }, { label: 'V', data: vD, backgroundColor: '#f39c12', borderRadius: 5 }]},
+                options: { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false } } } }
             });
         }
 
-        function addTask() {
-            const inp = document.getElementById('task-in');
-            if(inp.value) { if(!db.tasks) db.tasks = []; db.tasks.push({txt: inp.value, done: false}); save(); inp.value = ''; }
+        function renderCalendar() {
+            const body = document.getElementById('calendar-body'); body.innerHTML = '';
+            const now = new Date(); const todayKey = getToday();
+            const daysInMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0).getDate();
+            for(let i=1; i<=daysInMonth; i++) {
+                const k = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(i).padStart(2, '0');
+                const hasData = db.num[k] || db.ver[k];
+                const el = document.createElement('div'); el.className = `cal-day ${hasData ? 'work' : ''} ${k === todayKey ? 'today' : ''}`; el.textContent = i;
+                body.appendChild(el);
+            }
         }
+
+        function addTask() { const inp = document.getElementById('task-in'); if(inp.value) { db.tasks.push({txt: inp.value, done: false}); save(); inp.value = ''; } }
+        function toggleSyncPanel() { const p = document.getElementById('sync-panel'); p.style.display = p.style.display === 'block' ? 'none' : 'block'; }
         
-        update();
-        updateLangUI();
+        function connectCloud() {
+            const key = document.getElementById('sync-key').value.trim();
+            if (key.length < 4) return;
+            cloudRef = firebase.database().ref('users/' + btoa(key));
+            cloudRef.on('value', (snap) => { if (snap.exists()) { db = snap.val(); save(); } });
+            document.getElementById('cloud-btn').classList.add('active');
+            toggleSyncPanel();
+        }
+
+        updateUI();
     </script>
 </body>
 </html>
